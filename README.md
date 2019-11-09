@@ -13,4 +13,4 @@ PACKAGES: "common-tags": "^1.8.0",
     "yt-search": "^0.4.1",
     "ytdl-core": "^1.0.0"
     
- [My Discord Server] - (https://discord.gg/cz9gU73)
+ [My Discord Server](https://discord.gg/cz9gU73)
