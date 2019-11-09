@@ -13,4 +13,4 @@ PACKAGES: "common-tags": "^1.8.0",
     "yt-search": "^0.4.1",
     "ytdl-core": "^1.0.0"
     
-    My Discord Server - https://discord.gg/cz9gU73[submit a new issue](https://github.com/FirezzzZ]/1SHOT/issues/new)
+    My Discord Server - https://discord.gg/cz9gU73
