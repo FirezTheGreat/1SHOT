@@ -1,5 +1,6 @@
 const prefix = "!";
 const active = new Map();
+const queue = new Map();
 module.exports = async (bot, message) => { 
     if(message.author.bot || message.channel.type === "dm") return;
 
@@ -9,7 +10,8 @@ module.exports = async (bot, message) => {
     if(!message.content.startsWith(prefix)) return;
     try{
         let ops = {
-            active: active
+            active: active,
+            queue: queue
         }
     
     var commandfile = bot.commands.get(cmd) || bot.commands.get(bot.aliases.get(cmd))
