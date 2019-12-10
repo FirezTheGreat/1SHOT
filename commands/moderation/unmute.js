@@ -29,8 +29,12 @@ module.exports = {
         //remove role to the mentioned user and also send the user a dm explaing where and why they were unmuted
         mutee.removeRole(muterole.id).then(() => {
             mutee.send(`Hello, you have been unmuted in ${message.guild.name} for: ${reason}`).catch(err => console.log(err))
-            message.channel.send(`${mutee.user.username} was unmuted!`)
-        })
+
+            const sembed = new RichEmbed()
+                .setColor("GREEN")
+                .setDescription(`Unmuted ${mutee.user.username}`)
+            message.channel.send(sembed);
+        });
 
         //send an embed to the modlogs channel
         let embed = new RichEmbed()
@@ -42,6 +46,7 @@ module.exports = {
             .addField("Moderator:", message.author.username)
             .addField("Reason:", reason)
             .addField("Date:", message.createdAt.toLocaleString())
+            .setFooter(message.member.displayName, message.author.displayAvatarURL)
 
         let sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)

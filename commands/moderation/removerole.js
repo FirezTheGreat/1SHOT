@@ -1,5 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
 
 module.exports = {
     config: {
@@ -8,7 +7,7 @@ module.exports = {
         aliases: ["rr"],
         description: "Removes role from the user",
         accessableby: "Administrator",
-        usage: ", rr [username , id | role]"
+        usage: ", rr [username , id | role]",
     },
     run: async (bot, message, args) => {
 
@@ -22,15 +21,22 @@ module.exports = {
         if (!gRole) return message.reply("Couldn't find that role");
 
         if (rMember.roles.has(gRole.id)) await (rMember.removeRole(gRole.id));
-        message.channel.send("Role has been removed");
+
+        const sembed = new RichEmbed()
+            .setColor("GREEN")
+            .setDescription(`Role has been removed from ${rMember.user.username}`)
+        message.channel.send(sembed);
+
         const embed = new RichEmbed()
+            .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .setColor("#ff0000")
             .setThumbnail(rMember.user.displayAvatarURL)
             .setFooter(message.member.displayName, message.author.displayAvatarURL)
-            .setTimestamp()
-            .setDescription(stripIndents`**> Role added to:** ${rMember} ${rMember.id}
-            **> Role removed by:** ${message.author}`)
-            .addField("**Date:**", message.createdAt.toLocaleString());
+            .addField("Moderation:", "removerole")
+            .addField("Removed Role from:", rMember.user.username)
+            .addField("Removed By:", message.author.username)
+            .addField("Date:", message.createdAt.toLocaleString());
+
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)
     }

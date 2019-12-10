@@ -12,7 +12,7 @@ module.exports = {
         usage: ", h",
         category: "info",
         description: "Displays all commands that the bot has.",
-        accessableby: "everyone"
+        accessableby: "everyone",
     },
     run: async (bot, message, args) => {
         const embed = new RichEmbed()

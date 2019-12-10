@@ -1,43 +1,41 @@
-  const { RichEmbed } = require("discord.js");
-  const { stripIndents } = require("common-tags");
-  const { getMember, formatDate } = require("../../functions.js");
+const { RichEmbed } = require("discord.js");
+const { getMember, formatDate } = require("../../functions.js");
 
-  module.exports = {
-      config: {
-          name: "whois",
-          category: "info",
-          aliases: ["who", "user", "userinfo"],
-          description: "Returns user information",
-          usage: "[username | id | mention]",
-      },
-      run: async (bot, message, args) => {
-          const member = getMember(message, args.join(" "));
+module.exports = {
+    config: {
+        name: "whois",
+        category: "info",
+        aliases: ["who", "user", "userinfo"],
+        description: "Returns user information",
+        usage: "[username | id | mention]",
+    },
+    run: async (bot, message, args) => {
+        const member = getMember(message, args.join(" "));
 
-          const joined = formatDate(member.joinedAt);
-          const roles = member.roles
-              .filter(r => r.id !== message.guild.id)
-              .map(r => r).join(", ") || 'none';
+        const joined = formatDate(member.joinedAt);
+        const roles = member.roles
+            .filter(r => r.id !== message.guild.id)
+            .map(r => r).join(", ") || 'none';
 
-          const created = formatDate(member.user.createdAt);
+        const created = formatDate(member.user.createdAt);
 
-          const embed = new RichEmbed()
-              .setFooter(member.displayName, member.user.displayAvatarURL)
-              .setThumbnail(member.user.displayAvatarURL)
-              .setColor("RANDOM")
+        const embed = new RichEmbed()
+            .setTitle("User Info")
+            .setFooter(member.displayName, member.user.displayAvatarURL)
+            .setThumbnail(member.user.displayAvatarURL)
+            .setColor("GREEN")
+            .addField("**User information:**", `${member.displayName}`)
+            .addField("**ID:**", `${member.user.id}`)
+            .addField("**Username:**",`${member.user.username}`)
+            .addField("**Tag:**", `${member.user.tag}`)
+            .addField("**Created at:**", `${created}`)
+            .addField("**Joined at:**", `${joined}`)
+            .addField("**Roles:**", `${roles}`, true)
+            .setTimestamp()
 
-              .addField('User information', stripIndents `${member.displayName}
-            **> ID** ${member.user.id}
-            **> Username** ${member.user.username}
-            **> Tag** ${member.user.tag}
-            **> Created at** ${created}
-            **> Joined at** ${joined}
-            **> Roles** ${roles}`, true)
+        if (member.user.presence.game)
+            embed.addField('Currently playing',`\n**${member.user.presence.game.name}**`);
 
-              .setTimestamp()
-
-          if (member.user.presence.game)
-              embed.addField('Currently playing', stripIndents `**> ${member.user.presence.game.name}**`);
-
-          message.channel.send(embed);
-      }
-  }
+        message.channel.send(embed);
+    }
+}
