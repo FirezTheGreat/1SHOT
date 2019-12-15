@@ -12,7 +12,7 @@ module.exports = {
         usage: ", h",
         category: "info",
         description: "Displays all commands that the bot has.",
-        accessableby: "everyone",
+        accessableby: "everyone"
     },
     run: async (bot, message, args) => {
         const embed = new RichEmbed()
@@ -52,11 +52,12 @@ module.exports = {
             command = command.config
 
             embed.setDescription(stripIndents `The bot's prefix is: \`${prefix}\`\n
-            **> Command:** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}
-            **> Description:** ${command.description || "No Description provided."}
-            **> Usage:** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}
-            **> Accessible by:** ${command.accessableby || "everyone"}
-            **> Aliases:** ${command.aliases ? command.aliases.join(", ") : "None."}`)
+            ** Command:** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}\n
+            ** Description:** ${command.description || "No Description provided."}\n
+            ** Usage:** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}\n
+            ** Accessible by:** ${command.accessableby || "everyone"}\n
+            ** Aliases:** ${command.aliases ? command.aliases.join(", ") : "None."}`)
+            embed.setFooter(message.guild.name, message.guild.iconURL)
 
             return message.channel.send(embed)
         }

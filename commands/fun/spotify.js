@@ -27,7 +27,7 @@ module.exports = {
                 .addField('Song Name', trackName, true)
                 .addField('Album', trackAlbum, true)
                 .addField('Author', trackAuthor, false)
-                .addField('Listen to Track', `[\`${trackURL}\`](trackURL)`, false)
+                .addField('Listen to Track', `${trackURL}`, false)
                 .setFooter(message.member.displayName, message.author.displayAvatarURL)
                 .setTimestamp()
 

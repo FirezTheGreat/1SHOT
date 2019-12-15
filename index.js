@@ -1,11 +1,12 @@
 const { Client, Attachment, RichEmbed, Collection, Util } = require('discord.js');
-const { TOKEN, PREFIX, GOOGLE_API_KEY } = require('./config');
+const PREFIX = "!";
 const queue = new Map();
 const bot = new Client({ disableEveryone: true });
 const fs = require("fs");
+const server = require('./server.js');
 
 const YouTube = require("simple-youtube-api");
-const youtube = new YouTube(GOOGLE_API_KEY);
+const youtube = new YouTube(process.env.GOOGLEAPIKEY);
 const ytdl = require("ytdl-core");
 
 bot.commands = new Collection();
@@ -277,4 +278,4 @@ function play(guild, song, msg) {
 
 };
 
-bot.login(TOKEN);
+bot.login(process.env.TOKEN);

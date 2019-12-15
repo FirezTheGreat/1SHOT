@@ -1,15 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
-
-module.exports = {
-    config: {
-    name: "kick",
-    category: "moderation",
-    description: "Kicks the user",
-    accessableby: "Administrator",
-    usage: "[id | mention]",
-    const { RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
 
 module.exports = {
     config: {
@@ -43,11 +32,12 @@ module.exports = {
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .setColor("#ff0000")
             .setThumbnail(kickMember.user.displayAvatarURL)
-            .setFooter(message.member.displayName, message.author.displayAvatarURL)
-            .addField("Moderation:", "addrole")
-            .addField("Added Role to:", kickMember.user.username)
-            .addField("Added By:", message.author.username)
-            .addField("Date:", message.createdAt.toLocaleString());
+            .setFooter(message.guild.name, message.guild.iconURL)
+            .addField("Moderation:", "kick")
+            .addField("User Kicked:", kickMember.user.username)
+            .addField("Kicked By:", message.author.username)
+            .addField("Date:", message.createdAt.toLocaleString())
+            .setTimestamp();
 
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)

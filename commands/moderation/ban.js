@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { RichEmbed }  = require('discord.js');
 const { stripIndents } = require("common-tags");
 
 module.exports = {
@@ -36,12 +36,13 @@ module.exports = {
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .setColor("#ff0000")
             .setThumbnail(banMember.user.displayAvatarURL)
-            .setFooter(message.member.displayName, message.author.displayAvatarURL)
+            .setFooter(message.guild.name, message.guild.iconURL)
             .addField("Moderation:", "ban")
             .addField("Banned:", banMember.user.username)
             .addField("Banned By:", message.author.username)
             .addField("Reason:", reason)
-            .addField("Date:", message.createdAt.toLocaleString());
+            .addField("Date:", message.createdAt.toLocaleString())
+            .setTimestamp();
 
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)

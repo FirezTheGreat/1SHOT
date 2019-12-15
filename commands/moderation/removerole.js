@@ -31,12 +31,13 @@ module.exports = {
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .setColor("#ff0000")
             .setThumbnail(rMember.user.displayAvatarURL)
-            .setFooter(message.member.displayName, message.author.displayAvatarURL)
+            .setFooter(message.guild.name, message.guild.iconURL)
             .addField("Moderation:", "removerole")
             .addField("Removed Role from:", rMember.user.username)
             .addField("Removed By:", message.author.username)
-            .addField("Date:", message.createdAt.toLocaleString());
-
+            .addField("Date:", message.createdAt.toLocaleString())
+            .setTimestamp();
+    
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)
     }

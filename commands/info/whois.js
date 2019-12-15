@@ -7,16 +7,18 @@ module.exports = {
         category: "info",
         aliases: ["who", "user", "userinfo"],
         description: "Returns user information",
-        usage: "[username | id | mention]",
+        usage: "[id | mention]",
     },
     run: async (bot, message, args) => {
-        const member = getMember(message, args.join(" "));
-
+        const member = message.mentions.members.first() ? message.mentions.members.first() : message.guild.members.get(args[0]);
+      
+        if(!member)
+          return undefined;
+      
         const joined = formatDate(member.joinedAt);
         const roles = member.roles
             .filter(r => r.id !== message.guild.id)
             .map(r => r).join(", ") || 'none';
-
         const created = formatDate(member.user.createdAt);
 
         const embed = new RichEmbed()

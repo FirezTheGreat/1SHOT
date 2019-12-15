@@ -11,14 +11,15 @@ module.exports = {
     run: (bot, message, args) => {
 
         if (args.length === 0)
-            return message.reply("No")
+            return message.channel.send("No")
             message.delete()
 
             const embed = new RichEmbed()
                 .setDescription(args.join(" "))
                 .setColor(green_light);
 
-            message.channel.send(embed);
+            message.channel.send(embed)
+
         
     }
 }

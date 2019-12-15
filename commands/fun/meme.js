@@ -3,10 +3,10 @@ const randomPuppy = require("random-puppy");
 
 module.exports = {
     config: {
-        name: "meme",
-        category: "fun",
-        usage: " ",
-        description: "Sends an epic meme",
+    name: "meme",
+    category: "fun",
+    usage: " ",
+    description: "Sends an epic meme",
     },
     run: async (bot, message, args) => {
 

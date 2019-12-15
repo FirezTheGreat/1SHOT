@@ -58,9 +58,11 @@ module.exports = {
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .addField("Moderation:", "mute")
             .addField("Muted:", mutee.user.username)
-            .addField("Moderator:", message.author.username)
+            .addField("Muted By:", message.author.username)
             .addField("Reason:", reason)
             .addField("Date:", message.createdAt.toLocaleString())
+            .setFooter(message.guild.name, message.guild.iconURL)
+            .setTimestamp();
 
         let sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)

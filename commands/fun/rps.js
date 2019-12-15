@@ -15,7 +15,7 @@ module.exports = {
     run: async (bot, message, args) => {
         const embed = new RichEmbed()
             .setColor("#ffffff")
-            .setFooter(message.guild.me.dispatcher, bot.user.displayAvatarURL)
+            .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL)
             .setDescription("Add a reaction to one of those emojis to play the game!")
             .setTimestamp();
 

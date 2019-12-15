@@ -41,6 +41,8 @@ module.exports = {
             .addField("Moderator:", message.author.username)
             .addField("Reason:", reason)
             .addField("Date:", message.createdAt.toLocaleString())
+            .setFooter(message.guild.name, message.guild.iconURL)
+            .setTimestamp();
 
         let sChannel = message.guild.channels.find(c => c.name === "modlogs")
         sChannel.send(embed)
