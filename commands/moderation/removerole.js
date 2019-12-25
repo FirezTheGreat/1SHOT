@@ -24,6 +24,7 @@ module.exports = {
 
         const sembed = new RichEmbed()
             .setColor("GREEN")
+            .setAuthor(message.guild.name, message.guild.iconURL)
             .setDescription(`Role has been removed from ${rMember.user.username}`)
         message.channel.send(sembed);
 

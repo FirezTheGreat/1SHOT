@@ -19,13 +19,13 @@ module.exports = {
         if (!bannedMember) return message.channel.send("Please provide a user id to unban someone!")
 
         let reason = args.slice(1).join(" ")
-        if (!reason) reason = "No reason given!"
 
         if (!message.guild.me.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command!")
         try {
             message.guild.unban(bannedMember, reason)
             var sembed = new RichEmbed()
                 .setColor("GREEN")
+                .setAuthor(message.guild.name, message.guild.iconURL)
                 .setDescription(`${bannedMember.username} has been unbanned from the guild!`)
             message.channel.send(sembed)
         } catch (e) {
@@ -33,13 +33,13 @@ module.exports = {
         }
 
         let embed = new RichEmbed()
-            .setColor("RED")
+            .setColor("#ff0000")
             .setThumbnail(bannedMember.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .addField("Moderation:", "unban")
             .addField("Unbanned:", `${bannedMember.username} (${bannedMember.id})`)
             .addField("Moderator:", message.author.username)
-            .addField("Reason:", reason)
+            .addField("Reason:", `${reason}` || "**No Reason**")
             .addField("Date:", message.createdAt.toLocaleString())
             .setFooter(message.guild.name, message.guild.iconURL)
             .setTimestamp();

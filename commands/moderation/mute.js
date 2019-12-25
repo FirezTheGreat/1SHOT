@@ -1,9 +1,10 @@
 const { RichEmbed } = require("discord.js")
-const { red_light } = require("../../colours.json");
+const { redlight } = require("../../colours.json");
 
 module.exports = {
     config: {
         name: "mute",
+        noalias: "",
         description: "Mutes a member in the discord!",
         usage: "[user | <reason> (optional)]",
         category: "moderation",
@@ -18,7 +19,6 @@ module.exports = {
         if (!mutee) return message.channel.send("Please supply a user to be muted!");
 
         let reason = args.slice(1).join(" ");
-        if (!reason) reason = "No reason given"
 
         let muterole = message.guild.roles.find(r => r.name === "muted")
         if (!muterole) {
@@ -43,23 +43,24 @@ module.exports = {
         }
 
         mutee.addRole(muterole.id).then(() => {
-            mutee.send(`Hello, you have been muted in ${message.guild.name} for: ${reason}`).catch(err => console.log(err))
+            mutee.send(`Hello, you have been muted in ${message.guild.name} for: ${reason || "**No Reason**"}`).catch(err => console.log(err))
 
 
             let sembed = new RichEmbed()
                 .setColor("GREEN")
+                .setAuthor(message.guild.name, message.guild.iconURL)
                 .setDescription(`${mutee.user.username} was successfully muted.`)
             message.channel.send(sembed);
         })
 
         let embed = new RichEmbed()
-            .setColor(red_light)
+            .setColor(redlight)
             .setThumbnail(mutee.user.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .addField("Moderation:", "mute")
             .addField("Muted:", mutee.user.username)
             .addField("Muted By:", message.author.username)
-            .addField("Reason:", reason)
+            .addField("Reason:", reason || "No Reason")
             .addField("Date:", message.createdAt.toLocaleString())
             .setFooter(message.guild.name, message.guild.iconURL)
             .setTimestamp();

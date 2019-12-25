@@ -1,5 +1,4 @@
 const { RichEmbed }  = require('discord.js');
-const { stripIndents } = require("common-tags");
 
 module.exports = {
     config: {
@@ -19,16 +18,12 @@ module.exports = {
         if (!banMember) return message.channel.send("Please provide a user to ban!");
 
         var reason = args.slice(1).join(" ");
-        if (!reason) reason = "No reason given!"
 
         if (!message.guild.me.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command")
-
-
-        banMember.send(`Hello, you have been banned from ${message.guild.name} for ${reason}`).then(() =>
-            message.guild.ban(banMember, { days: 1, reason: reason })).catch(err => console.log(err))
-
+      
         var sembed = new RichEmbed()
             .setColor("GREEN")
+            .setAuthor(message.guild.name, message.guild.iconURL)
             .setDescription(`**${banMember.user.username}** has been banned`)
         message.channel.send(sembed)
 
@@ -40,7 +35,7 @@ module.exports = {
             .addField("Moderation:", "ban")
             .addField("Banned:", banMember.user.username)
             .addField("Banned By:", message.author.username)
-            .addField("Reason:", reason)
+            .addField("Reason:", reason || "**No Reason**")
             .addField("Date:", message.createdAt.toLocaleString())
             .setTimestamp();
 

@@ -1,9 +1,10 @@
 const { RichEmbed } = require("discord.js")
-const { red_light } = require("../../colours.json");
+const { redlight } = require("../../colours.json");
 
 module.exports = {
     config: {
         name: "unmute",
+        noalias: "",
         description: "Unmutes a member in the discord!",
         usage: "[user | <reason> (optional)]",
         accessableby: "Administrator",
@@ -18,28 +19,28 @@ module.exports = {
         if (!mutee) return message.channel.send("Please name a user!");
 
         let reason = args.slice(1).join(" ");
-        if (!reason) reason = "No reason given"
 
         let muterole = message.guild.roles.find(r => r.name === "muted")
         if (!muterole) return message.channel.send("There is no mute role to remove!")
 
         mutee.removeRole(muterole.id).then(() => {
-            mutee.send(`Hello, you have been unmuted in ${message.guild.name} for: ${reason}`).catch(err => console.log(err))
+            mutee.send(`Hello, you have been unmuted in ${message.guild.name} for: ${reason || "**No Reason**"}`).catch(err => console.log(err))
 
             const sembed = new RichEmbed()
                 .setColor("GREEN")
+                .setAuthor(message.guild.name, message.guild.iconURL)
                 .setDescription(`Unmuted ${mutee.user.username}`)
             message.channel.send(sembed);
         });
 
         let embed = new RichEmbed()
-            .setColor(red_light)
+            .setColor(redlight)
             .setThumbnail(mutee.user.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .addField("Moderation:", "unmute")
             .addField("Unmuted:", mutee.user.username)
             .addField("Moderator:", message.author.username)
-            .addField("Reason:", reason)
+            .addField("Reason:", reason || "**No Reason**")
             .addField("Date:", message.createdAt.toLocaleString())
             .setFooter(message.member.displayName, message.author.displayAvatarURL)
             .setTimestamp();

@@ -1,5 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
 
 module.exports = {
     config: {
@@ -25,8 +24,10 @@ module.exports = {
         if (!rMember.roles.has(gRole.id)) await rMember.addRole(gRole.id);
         var sembed = new RichEmbed()
             .setColor("GREEN")
+            .setAuthor(message.guild.name, message.guild.iconURL)
             .setDescription(`Role has been added to ${rMember.user.username}`)
-        message.channel.send(sembed);
+        message.channel.send(sembed).then
+      
         const embed = new RichEmbed()
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
             .setColor("#ff0000")

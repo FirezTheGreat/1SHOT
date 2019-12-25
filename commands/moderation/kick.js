@@ -17,14 +17,12 @@ module.exports = {
         if (!kickMember) return message.reply("Please provide a name to kick");
 
         var reason = args.slice(1).join(" ");
-        if (!reason) reason = "No reason given!"
 
         if (!message.guild.me.hasPermission("KICK_MEMBERS")) return message.reply("❌ I do not have permissions to kick members!");
-
-        kickMember.send(`Hello, you have been kicked from ${message.guild.name} for ${reason}`).then(() =>
-            kickMember.kick()).catch(err => console.error(err));
+      
         var sembed = new RichEmbed()
             .setColor("GREEN")
+            .setAuthor(message.guild.name, message.guild.iconURL)
             .setDescription(`**${kickMember.user.username}** has been kicked`)
         message.channel.send(sembed);
 
@@ -36,6 +34,7 @@ module.exports = {
             .addField("Moderation:", "kick")
             .addField("User Kicked:", kickMember.user.username)
             .addField("Kicked By:", message.author.username)
+            .addField("**Reason:**", reason || "**No Reason**")
             .addField("Date:", message.createdAt.toLocaleString())
             .setTimestamp();
 
