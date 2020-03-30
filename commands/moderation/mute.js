@@ -57,11 +57,11 @@ module.exports = {
             .setColor(redlight)
             .setThumbnail(mutee.user.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
-            .addField("Moderation:", "mute")
-            .addField("Muted:", mutee.user.username)
-            .addField("Muted By:", message.author.username)
-            .addField("Reason:", reason || "No Reason")
-            .addField("Date:", message.createdAt.toLocaleString())
+            .addField("**Moderation**", "mute")
+            .addField("**Muted**", mutee.user.username)
+            .addField("**Muted By**", message.author.username)
+            .addField("**Reason**", reason || "No Reason")
+            .addField("**Date**", message.createdAt.toLocaleString())
             .setFooter(message.guild.name, message.guild.iconURL)
             .setTimestamp();
 

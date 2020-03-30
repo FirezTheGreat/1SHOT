@@ -33,10 +33,10 @@ module.exports = {
             .setColor("#ff0000")
             .setThumbnail(rMember.user.displayAvatarURL)
             .setFooter(message.guild.name, message.guild.iconURL)
-            .addField("Moderation:", "addrole")
-            .addField("Added Role to:", rMember.user.username)
-            .addField("Added By:", message.author.username)
-            .addField("Date:", message.createdAt.toLocaleString())
+            .addField("**Moderation**", "addrole")
+            .addField("**Added Role to**", rMember.user.username)
+            .addField("**Added By**", message.author.username)
+            .addField("**Date**", message.createdAt.toLocaleString())
             .setTimestamp();
 
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")

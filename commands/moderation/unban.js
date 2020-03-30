@@ -4,7 +4,7 @@ module.exports = {
     config: {
         name: "unban",
         description: "Unban a user from the guild!",
-        usage: "!unban",
+        usage: "[ id ]",
         category: "moderation",
         accessableby: "Administrator",
         aliases: ["ub", "unbanish"],
@@ -26,7 +26,7 @@ module.exports = {
             var sembed = new RichEmbed()
                 .setColor("GREEN")
                 .setAuthor(message.guild.name, message.guild.iconURL)
-                .setDescription(`${bannedMember.username} has been unbanned from the guild!`)
+                .setDescription(`${bannedMember.username} has been unbanned`)
             message.channel.send(sembed)
         } catch (e) {
             console.log(e.message)
@@ -36,11 +36,11 @@ module.exports = {
             .setColor("#ff0000")
             .setThumbnail(bannedMember.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
-            .addField("Moderation:", "unban")
-            .addField("Unbanned:", `${bannedMember.username} (${bannedMember.id})`)
-            .addField("Moderator:", message.author.username)
-            .addField("Reason:", `${reason}` || "**No Reason**")
-            .addField("Date:", message.createdAt.toLocaleString())
+            .addField("**Moderation**", "unban")
+            .addField("**Unbanned**", `${bannedMember.username} (${bannedMember.id})`)
+            .addField("**Moderator**", message.author.username)
+            .addField("**Reason**", `${reason}` || "**No Reason**")
+            .addField("**Date**", message.createdAt.toLocaleString())
             .setFooter(message.guild.name, message.guild.iconURL)
             .setTimestamp();
 

@@ -4,6 +4,7 @@ module.exports = {
     config: {
         name: "poll",
         description: "polling",
+        noalias: "No Aliases",
         category: "info",
         usage: " [question]",
         accessableby: "Administrator",

@@ -8,6 +8,7 @@ module.exports = {
         aliases: ["who", "user", "userinfo"],
         description: "Returns user information",
         usage: "[id | mention]",
+        accessableby: "everyone"
     },
     run: async (bot, message, args) => {
         const member = message.mentions.members.first() ? message.mentions.members.first() : message.guild.members.get(args[0]);
@@ -26,13 +27,13 @@ module.exports = {
             .setFooter(member.displayName, member.user.displayAvatarURL)
             .setThumbnail(member.user.displayAvatarURL)
             .setColor("GREEN")
-            .addField("**User information:**", `${member.displayName}`)
-            .addField("**ID:**", `${member.user.id}`)
-            .addField("**Username:**",`${member.user.username}`)
-            .addField("**Tag:**", `${member.user.tag}`)
-            .addField("**Created at:**", `${created}`)
-            .addField("**Joined at:**", `${joined}`)
-            .addField("**Roles:**", `${roles}`, true)
+            .addField("**User information**", `${member.displayName}`)
+            .addField("**ID**", `${member.user.id}`)
+            .addField("**Username**",`${member.user.username}`)
+            .addField("**Tag**", `${member.user.tag}`)
+            .addField("**Created at**", `${created}`)
+            .addField("**Joined at**", `${joined}`)
+            .addField("**Roles**", `${roles}`, true)
             .setTimestamp()
 
         if (member.user.presence.game)

@@ -36,13 +36,13 @@ module.exports = {
             .setThumbnail(target.user.displayAvatarURL)
             .setFooter(message.guild.name, message.guild.iconURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
-            .addField("Moderation", "report")
-            .addField("**User Reported:**", `${target}`)
-            .addField("**User ID:**", `${target.user.id}`)
-            .addField("**Reported By:**", `${message.member}`)
-            .addField("**Reported in:**", `${message.channel}`)
-            .addField("**Reason:**", `**${reason || "No Reason"}**`)
-            .addField("Date:", message.createdAt.toLocaleString());
+            .addField("**Moderation**", "report")
+            .addField("**User Reported**", `${target}`)
+            .addField("**User ID**", `${target.user.id}`)
+            .addField("**Reported By**", `${message.member}`)
+            .addField("**Reported in**", `${message.channel}`)
+            .addField("**Reason**", `**${reason || "No Reason"}**`)
+            .addField("**Date**", message.createdAt.toLocaleString());
 
         sChannel.send(sembed);
     }

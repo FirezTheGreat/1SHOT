@@ -4,7 +4,7 @@ const { RichEmbed } = require('discord.js');
 module.exports = {
     config: {
         name: "weather",
-        aliases: "",
+        noalias: "No Aliases",
         category: "info",
         description: "Shows weather of a city",
         usage: "[city name]",

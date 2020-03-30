@@ -32,11 +32,11 @@ module.exports = {
             .setColor("#ff0000")
             .setThumbnail(banMember.user.displayAvatarURL)
             .setFooter(message.guild.name, message.guild.iconURL)
-            .addField("Moderation:", "ban")
-            .addField("Banned:", banMember.user.username)
-            .addField("Banned By:", message.author.username)
-            .addField("Reason:", reason || "**No Reason**")
-            .addField("Date:", message.createdAt.toLocaleString())
+            .addField("**Moderation**", "ban")
+            .addField("**Banned**", banMember.user.username)
+            .addField("**Banned By**", message.author.username)
+            .addField("**Reason**", reason || "**No Reason**")
+            .addField("**Date**", message.createdAt.toLocaleString())
             .setTimestamp();
 
         var sChannel = message.guild.channels.find(c => c.name === "modlogs")

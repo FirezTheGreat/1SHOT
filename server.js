@@ -1,12 +1,21 @@
 const express = require("express");
 const app = express();
 
+const dreams = [
+  "Find and count some sheep",
+  "Climb a really tall mountain",
+  "Wash the dishes"
+];
+app.use(express.static("public"));
+
 app.get("/", (request, response) => {
-  console.log("Ping received!");
-  response.sendStatus(200);
+  response.sendFile(__dirname + "/views/index.html");
 });
 
-// listen for requests :)
-const listener = app.listen(process.env.PORT, function() {
+app.get("/dreams", (request, response) => {
+  response.json(dreams);
+});
+
+const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });

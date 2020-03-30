@@ -1,7 +1,7 @@
 const { Util, RichEmbed } = require('discord.js');
-
+const { GOOGLE_API_KEY } = require('../../config')
 const YouTube = require("simple-youtube-api");
-const youtube = new YouTube(process.env.GOOGLE_API_KEY);
+const youtube = new YouTube(GOOGLE_API_KEY);
 const ytdl = require('ytdl-core');
 
 module.exports = {
@@ -66,7 +66,8 @@ module.exports = {
                     connection: null,
                     songs: [],
                     volume: 2,
-                    playing: true
+                    playing: true,
+                    loop: false
                 };
                 ops.queue.set(message.guild.id, queueConstruct);
                 queueConstruct.songs.push(song);
@@ -107,6 +108,10 @@ module.exports = {
                 .on('end', reason => {
                     if (reason === 'Stream is not generating quickly enough.') console.log(reason);
                     else return undefined;
+                    if (queue.loop) {
+                      queue.songs.push(queue.songs.shift())
+                      return play(queue.songs[0]);
+                  }
                     queue.songs.shift();
                     play(queue.songs[0]);
                 })

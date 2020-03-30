@@ -5,8 +5,10 @@ module.exports = {
     config: {
     name: "meme",
     category: "fun",
+    noalias: "No Aliases",
     usage: " ",
     description: "Sends an epic meme",
+    accessableby: "everyone"
     },
     run: async (bot, message, args) => {
 

@@ -4,7 +4,7 @@ const { redlight } = require("../../colours.json");
 module.exports = {
     config: {
         name: "unmute",
-        noalias: "",
+        aliases: ["um"],
         description: "Unmutes a member in the discord!",
         usage: "[user | <reason> (optional)]",
         accessableby: "Administrator",
@@ -29,7 +29,7 @@ module.exports = {
             const sembed = new RichEmbed()
                 .setColor("GREEN")
                 .setAuthor(message.guild.name, message.guild.iconURL)
-                .setDescription(`Unmuted ${mutee.user.username}`)
+                .setDescription(`${mutee.user.username} was successfully unmuted.`)
             message.channel.send(sembed);
         });
 
@@ -37,11 +37,11 @@ module.exports = {
             .setColor(redlight)
             .setThumbnail(mutee.user.displayAvatarURL)
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
-            .addField("Moderation:", "unmute")
-            .addField("Unmuted:", mutee.user.username)
-            .addField("Moderator:", message.author.username)
-            .addField("Reason:", reason || "**No Reason**")
-            .addField("Date:", message.createdAt.toLocaleString())
+            .addField("**Moderation**", "unmute")
+            .addField("**Unmuted**", mutee.user.username)
+            .addField("**Moderator**", message.author.username)
+            .addField("**Reason**", reason || "**No Reason**")
+            .addField("**Date**", message.createdAt.toLocaleString())
             .setFooter(message.member.displayName, message.author.displayAvatarURL)
             .setTimestamp();
 

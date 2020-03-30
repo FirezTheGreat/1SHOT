@@ -5,7 +5,7 @@ module.exports = {
     config: {
         name: "instasearch",
         category: "fun",
-        aliases: ["sinsta", "searchinsta"],
+        aliases: ["searchinsta", "sinsta"],
         description: "searches insta ids",
         usage: "[name]",
         accessableby: "everyone",

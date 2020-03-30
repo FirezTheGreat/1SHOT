@@ -4,7 +4,7 @@ module.exports = {
     config: {
         name: 'spotify',
         category: "fun",
-        aliases: "",
+        noalias: "No Aliases",
         description: "shows stats of the person listening",
         usage: "[no mention | mention (optional)]",
         accessableby: 'everyone'
@@ -27,7 +27,7 @@ module.exports = {
                 .addField('Song Name', trackName, true)
                 .addField('Album', trackAlbum, true)
                 .addField('Author', trackAuthor, false)
-                .addField('Listen to Track', `${trackURL}`, false)
+                .addField('Listen to Track', `[\`${trackURL}\`](trackURL)`, false)
                 .setFooter(message.member.displayName, message.author.displayAvatarURL)
                 .setTimestamp()
 
