@@ -1,5 +1,5 @@
+const { MessageEmbed } = require('discord.js');
 const urban = require('relevant-urban');
-const { RichEmbed } = require('discord.js');
 
 module.exports = {
     config: {
@@ -7,7 +7,7 @@ module.exports = {
         aliases: ["ud", "urban"],
         category: "fun",
         description: "Give information about urban words!",
-        usage: ", ud, urban [word]",
+        usage: "[word]",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
@@ -20,7 +20,7 @@ module.exports = {
                 if (!res) return message.channel.send("No results found for this topic, sorry!");
                 let { word, urbanURL, definition, example, thumbsUp, thumbsDown, author } = res;
 
-                let embed = new RichEmbed()
+                let embed = new MessageEmbed()
                     .setColor("GREEN")
                     .setAuthor(`Word - ${word}`)
                     .setThumbnail(image)

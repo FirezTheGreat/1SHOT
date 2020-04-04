@@ -1,4 +1,4 @@
-const prefix = "!";
+const prefix = ".";
 const active = new Map();
 const queue = new Map();
 module.exports = async (bot, message) => { 

@@ -14,24 +14,19 @@
   "license": "ISC",
   "dependencies": {
     "common-tags": "^1.8.0",
-    "discord.js": "^11.6.3",
-    "discord.js-commando": "^0.10.0",
-    "dotenv": "latest",
-    "moment": "^2.24.0",
+    "discord.js": "^12.1.1",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
     "opusscript": "0.0.7",
     "random-puppy": "^1.1.0",
     "simple-youtube-api": "^5.2.1",
-    "superagent": "^5.2.2",
     "weather-js": "^2.0.0",
-    "youtube-search": "^1.1.4",
-    "yt-search": "^1.1.2",
     "ytdl-core": "^2.0.1",
-    "ytdl-core-discord": "^1.1.0",
     "relevant-urban": "^2.0.0",
     "http": "^0.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "@discordjs/opus": "^0.1.0",
+    "fs": "^0.0.2"
   },
   "devDependencies": {}
 }

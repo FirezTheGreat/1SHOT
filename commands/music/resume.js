@@ -1,11 +1,10 @@
-
 module.exports = {
     config: {
         name: 'resume',
         aliases: ["res"],
         category: "music",
-        description: 'Resume command.',
-        usage: "resumes music",
+        description: 'resumes music',
+        usage: " ",
         accessableby: "everyone"
     },
     run: async(bot, message, args, ops) => {
@@ -15,6 +14,6 @@ module.exports = {
             serverQueue.connection.dispatcher.resume();
             return message.channel.send('▶ **Resumed**');
         }
-        return message.channel.send('There is nothing playing.');
+        return message.channel.send('**There is nothing to resume**.');
     }
 };

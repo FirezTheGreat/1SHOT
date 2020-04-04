@@ -1,7 +1,7 @@
 module.exports = {
     config: {
         name: 'pause',
-        noalias: [''],
+        noalias: 'No Aliases',
         category: "music",
         description: 'Pause command.',
         usage: " ",
@@ -11,7 +11,7 @@ module.exports = {
         const serverQueue = ops.queue.get(message.guild.id);
         if (serverQueue && serverQueue.playing) {
             serverQueue.playing = false;
-            serverQueue.connection.dispatcher.pause();
+            serverQueue.connection.dispatcher.pause(true);
             return message.channel.send('**Paused** ⏸');
         }
         return message.channel.send('There is nothing playing.');

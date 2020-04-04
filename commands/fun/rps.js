@@ -1,5 +1,6 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { promptMessage } = require("../../functions");
+const { white } = require("../../colours.json")
 
 const chooseArr = ["🗻", "📰", "✂"];
 
@@ -13,9 +14,9 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        const embed = new RichEmbed()
-            .setColor("#ffffff")
-            .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL)
+        const embed = new MessageEmbed()
+            .setColor(white)
+            .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL())
             .setDescription("Add a reaction to one of those emojis to play the game!")
             .setTimestamp();
 
@@ -25,7 +26,7 @@ module.exports = {
         const botChoice = chooseArr[Math.floor(Math.random() * chooseArr.length)];
 
         const result = await getResult(reacted, botChoice);
-        await m.clearReactions();
+        await m.reactions.removeAll();
 
         embed
             .setDescription("")

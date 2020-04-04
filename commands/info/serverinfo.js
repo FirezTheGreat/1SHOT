@@ -1,30 +1,29 @@
-  
-const { RichEmbed } = require("discord.js")
+const { MessageEmbed } = require("discord.js")
 const { greenlight } = require("../../colours.json")
 
 module.exports = {
     config: {
         name: "serverinfo",
         description: "Pulls the serverinfo of the guild!",
-        usage: ", !sinfo",
+        usage: " ",
         category: "info",
         accessableby: "everyone",
         aliases: ["sinfo"]
     },
-    run: async (guild, message, args) => {
-        let embed = new RichEmbed()
+    run: async (bot, message, args) => {
+        let embed = new MessageEmbed()
             .setColor(greenlight)
             .setTitle("Server Info")
-            .setThumbnail(message.guild.iconURL)
-            .setAuthor(`${message.guild.name} Info`, message.guild.iconURL)
+            .setThumbnail(message.guild.iconURL())
+            .setAuthor(`${message.guild.name} Info`, message.guild.iconURL())
             .addField("**Guild Name**", `${message.guild.name}`, true)
             .addField("**Guild Owner**", `${message.guild.owner.user.tag}`, true)
             .addField("**ID**", `${message.guild.id}`)
             .addField("**Created At**", `${message.guild.createdAt}`)
-            .addField("**Text Channels**", `${message.guild.channels.filter(r => r.type === "text").size}`)
-            .addField("**Voice Channels**", `${message.guild.channels.filter(c => c.type === "voice").size}`)
+            .addField("**Text Channels**", `${message.guild.channels.cache.filter(r => r.type === "text").size}`)
+            .addField("**Voice Channels**", `${message.guild.channels.cache.filter(c => c.type === "voice").size}`)
             .addField("**Members**", `${message.guild.memberCount}`, true)
-            .addField("**Roles**", `${message.guild.roles.size}`, true)
+            .addField("**Roles**", `${message.guild.roles.cache.size}`, true)
         message.channel.send(embed);
     }
 }

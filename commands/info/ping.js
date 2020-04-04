@@ -2,9 +2,9 @@ module.exports = {
     config: {
         name: "ping",
         description: "PONG! Displays the api & bot latency",
-        usage: "!ping",
+        usage: " ",
         noalias: "No Aliases",
-        category: "miscellaneous",
+        category: "info",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {

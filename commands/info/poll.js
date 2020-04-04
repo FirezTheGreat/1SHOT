@@ -1,12 +1,12 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     config: {
         name: "poll",
         description: "polling",
-        noalias: "No Aliases",
         category: "info",
-        usage: " [question]",
+        usage: "[question]",
+        noalias: "No Aliases",
         accessableby: "Administrator",
     },
     run: async (bot, message, args) => {
@@ -16,10 +16,10 @@ module.exports = {
         if (!args[0])
             return undefined;
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setColor("GREEN")
             .setTitle(`Poll for 1SHOT Sever`)
-            .setFooter(message.member.displayName, message.author.displayAvatarURL)
+            .setFooter(message.member.displayName, message.author.displayAvatarURL())
             .setDescription(args.join(' '))
             .setTitle(`Poll by ${message.author.username}`);
         var msg = await message.channel.send(embed);

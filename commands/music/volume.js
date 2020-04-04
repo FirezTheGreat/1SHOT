@@ -8,8 +8,8 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
-        const { voiceChannel } = message.member;
-        if (!voiceChannel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
+        const { channel } = message.member.voice;
+        if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('There is nothing playing.');
         if (!args[0]) return message.channel.send(`The current volume is: **${serverQueue.volume}**`);

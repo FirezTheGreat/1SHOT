@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     config: {
@@ -12,7 +12,7 @@ module.exports = {
     run: async (bot, message, args) => {
     let role = args.join(` `)
     if(!role) return message.channel.send("Which role!");
-    let gRole = message.guild.roles.find(r => r.name === role)
+    let gRole = message.guild.roles.cache.find(r => r.name === role)
     if(!gRole) return message.channel.send("Couldn't find that role.");
 
     const status = {
@@ -20,10 +20,10 @@ module.exports = {
         true: "Yes"
       }
 
-    let roleembed = new RichEmbed()
+    let roleembed = new MessageEmbed()
     .setColor("#00ff00")
     .setAuthor("Role Info")
-    .setThumbnail(message.guild.iconURL)
+    .setThumbnail(message.guild.iconURL())
     .addField("ID", `\`${gRole.id}\``, true )
     .addField("Name", gRole.name, true)
     .addField("Hex", gRole.hexColor)

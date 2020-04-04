@@ -1,16 +1,16 @@
-const { Util, RichEmbed } = require('discord.js');
-const { GOOGLE_API_KEY } = require('../../config')
+const { Util, MessageEmbed } = require('discord.js');
+const { GOOGLE_API_KEY } = require('../../config');
 const YouTube = require("simple-youtube-api");
 const youtube = new YouTube(GOOGLE_API_KEY);
 const ytdl = require('ytdl-core');
 
-module.exports = {
+module.exports = {                    
     config: {
         name: 'play',
-        category: "music",
+        description: 'Play command',
         aliases: ["p"],
-        description: 'Play command.',
-        usage: ', p [link | song name]',
+        category: "music",
+        usage: '[song ( name | link)]',
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
@@ -19,12 +19,12 @@ module.exports = {
         const searchString = args.slice(1).join(' ');
         const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
 
-        const { voiceChannel } = message.member;
-        if (!voiceChannel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
-        const permissions = voiceChannel.permissionsFor(message.client.user);
+        const { channel } = message.member.voice;
+        if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
+        
+        const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');
         if (!permissions.has('SPEAK')) return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
-
 
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await youtube.getPlaylist(url);
@@ -32,9 +32,9 @@ module.exports = {
 
             for (const video of Object.values(videos)) {
                 const video2 = await youtube.getVideoByID(video.id);
-                await handleVideo(video2, message, voiceChannel, true);
+                await handleVideo(video2, message, channel, true);
             }
-            return message.channel.send(`Playlist: **${playlist.title}** has been added to the queue!`);
+            return message.channel.send(`**Playlist \`${playlist.title}\` has been added to the queue!**`);
         } else {
             try {
                 var video = await youtube.getVideo(url);
@@ -47,22 +47,37 @@ module.exports = {
                     return message.channel.send('❌ **No matches**')
                 }
             }
-            return handleVideo(video, message, voiceChannel);
-        }
+            return handleVideo(video, message, channel);
 
-        async function handleVideo(video, message, voiceChanne, playlist = false) {
-            const serverQueue = ops.queue.get(message.guild.id);
-            const song = {
-                id: video.id,
-                title: Util.escapeMarkdown(video.title),
-                url: `https://www.youtube.com/watch?v=${video.id}`,
-                thumbnail: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`
-            };
 
-            if (!serverQueue) {
+            async function handleVideo(video, message, channel, playlist = false) {
+                const serverQueue = ops.queue.get(message.guild.id);
+                const song = {
+                    id: video.id,
+                    title: Util.escapeMarkdown(video.title),
+                    url: `https://www.youtube.com/watch?v=${video.id}`,
+                    thumbnail: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`
+                };
+
+                if (serverQueue) {
+                    serverQueue.songs.push(song);
+                    if (playlist) return undefined;
+                    else {
+                        const sembed = new MessageEmbed()
+                            .setColor("GREEN")
+                            .setTitle("Added To Queue")
+                            .setThumbnail(song.thumbnail)
+                            .setTimestamp()
+                            .setDescription(`**${song.title}** has been added to queue! | Requested By **${message.author.username}**`)
+                            .setFooter(message.member.displayName, message.author.displayAvatarURL());
+                        message.channel.send(sembed)
+                    }
+                    return undefined;
+                }
+
                 const queueConstruct = {
-                    textchannel: message.channel,
-                    voiceChannel,
+                    textChannel: message.channel,
+                    voiceChannel: channel,
                     connection: null,
                     songs: [],
                     volume: 2,
@@ -72,59 +87,44 @@ module.exports = {
                 ops.queue.set(message.guild.id, queueConstruct);
                 queueConstruct.songs.push(song);
                 try {
-                    var connection = await voiceChannel.join();
+                    const connection = await channel.join();
                     queueConstruct.connection = connection;
                     play(queueConstruct.songs[0]);
                 } catch (error) {
-                    console.error(`I could not join the voice channel: ${error}`);
-                    queue.delete(message.guild.id);
-                    return undefined;
-                }
-        
-            } else {
-                serverQueue.songs.push(song);
-                if (playlist) return undefined;
-                else {
-                    const sembed = new RichEmbed()
-                        .setColor("GREEN")
-                        .setTitle("Added To Queue")
-                        .setThumbnail(song.thumbnail)
-                        .setTimestamp()
-                        .setDescription(`**${song.title}** has been added to queue! | Requested By **${message.author.username}**`)                        .setFooter(message.member.displayName, message.author.displayAvatarURL);
-                    message.channel.send(sembed)
+                    console.error(`I could not join the voice channel: ${error.message}`);
+                    ops.queue.delete(message.guild.id);
+                    await channel.leave();
+                    return message.channel.send(`I could not join the voice channel: ${error.message}`);
                 }
             }
-            return undefined;
-        }
-        async function play(song) {
-            const queue = ops.queue.get(message.guild.id);
-            if (!song) {
-                queue.voiceChannel.leave();
-                ops.queue.delete(message.guild.id);
-                return;
-            }
+            async function play(song) {
+                const queue = ops.queue.get(message.guild.id);
+                if (!song) {
+                    queue.voiceChannel.leave();
+                    ops.queue.delete(message.guild.id);
+                    return;
+                }
 
-            const dispatcher = queue.connection.playStream(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 20 }, { bitrate: 192000 }))
-                .on('end', reason => {
-                    if (reason === 'Stream is not generating quickly enough.') console.log(reason);
-                    else return undefined;
-                    if (queue.loop) {
-                      queue.songs.push(queue.songs.shift())
-                      return play(queue.songs[0]);
-                  }
-                    queue.songs.shift();
-                    play(queue.songs[0]);
-                })
-                .on('error', error => console.error(error));
-            dispatcher.setVolumeLogarithmic(queue.volume / 5);
-            const embed = new RichEmbed()
-                .setColor("GREEN")
-                .setTitle('Now Playing\n')
-                .setThumbnail(song.thumbnail)
-                .setTimestamp()
-                .setDescription(`🎵 Now playing:\n **${song.title}** 🎵`)
-                .setFooter(message.member.displayName, message.author.displayAvatarURL);
-            queue.textchannel.send(embed);
-        };
+                const dispatcher = queue.connection.play(ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 25, quality: "highestaudio"}))
+                    .on('finish', () => {
+                        if (queue.loop) {
+                            queue.songs.push(queue.songs.shift());
+                            return play(queue.songs[0]);
+                        }
+                        queue.songs.shift();
+                        play(queue.songs[0]);
+                    })
+                    .on('error', error => console.error(error));
+                dispatcher.setVolumeLogarithmic(queue.volume / 5);
+                const embed = new MessageEmbed()
+                    .setColor("GREEN")
+                    .setTitle('Now Playing\n')
+                    .setThumbnail(song.thumbnail)
+                    .setTimestamp()
+                    .setDescription(`🎵 Now playing:\n **${song.title}** 🎵`)
+                    .setFooter(message.member.displayName, message.author.displayAvatarURL());
+                queue.textChannel.send(embed);
+            };
+        }
     }
 };

@@ -1,5 +1,5 @@
-const { RichEmbed } = require("discord.js");
-const { getMember, formatDate } = require("../../functions.js");
+const { MessageEmbed } = require("discord.js");
+const { formatDate } = require("../../functions.js");
 
 module.exports = {
     config: {
@@ -22,10 +22,10 @@ module.exports = {
             .map(r => r).join(", ") || 'none';
         const created = formatDate(member.user.createdAt);
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle("User Info")
-            .setFooter(member.displayName, member.user.displayAvatarURL)
-            .setThumbnail(member.user.displayAvatarURL)
+            .setFooter(member.displayName, member.user.displayAvatarURL())
+            .setThumbnail(member.user.displayAvatarURL())
             .setColor("GREEN")
             .addField("**User information**", `${member.displayName}`)
             .addField("**ID**", `${member.user.id}`)

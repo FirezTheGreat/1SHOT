@@ -4,8 +4,8 @@ module.exports = {
         aliases: ["delete"],
         category: "moderation",
         description: "Deletes messages from a channel",
-        usage: ", delete [amount of messages]",
-        accessableby: "Administrator, Moderator"
+        usage: "delete [amount of messages]",
+        accessableby: "Administrator"
     },
     run: async (bot, message, args) => {
         if (isNaN(args[0]))

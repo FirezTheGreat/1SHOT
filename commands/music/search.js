@@ -1,4 +1,8 @@
-const { RichEmbed, Util } = require("discord.js")
+const { MessageEmbed, Util } = require("discord.js")
+const { GOOGLE_API_KEY } = require('../../config')
+const YouTube = require("simple-youtube-api");
+const youtube = new YouTube(GOOGLE_API_KEY);
+const ytdl = require('ytdl-core');
 
 module.exports = {
     config: {
@@ -11,17 +15,14 @@ module.exports = {
     },
     run: async (bot, message, args, ops) => {
 
-        const YouTube = require("simple-youtube-api");
-        const youtube = new YouTube(process.env.GOOGLE_API_KEY);
-        const ytdl = require('ytdl-core')
 
         const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
         const searchString = args.slice(1).join(' ');
 
-        const voiceChannel = message.member.voiceChannel;
-        if (!voiceChannel) return message.channel.send("You are not in a voice channel!");
+        const { channel } = message.member.voice;
+        if (!channel) return message.channel.send("You are not in a voice channel!");
 
-        const permissions = voiceChannel.permissionsFor(message.client.user);
+        const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) {
             return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');
         }
@@ -35,31 +36,30 @@ module.exports = {
 
             for (const video of Object.values(videos)) {
                 const video2 = await youtube.getVideoByID(video.id);
-                await handleVideo(video2, message, voiceChannel, true);
+                await handleVideo(video2, message, channel, true);
             }
         }
         else {
             try {
-
                 var video = await youtube.getVideo(url);
                 console.log(video)
             } catch (error) {
                 try {
                     var videos = await youtube.searchVideos(searchString, 10);
                     let index = 0;
-                    const sembed = new RichEmbed()
+                    const sembed = new MessageEmbed()
                         .setColor("GREEN")
-                        .setFooter(message.member.displayName, message.author.avatarURL)
+                        .setFooter(message.member.displayName, message.author.avatarURL())
                         .setDescription(`
                     __**Song selection:**__\n
                     ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
                     \nPlease provide a value to select one of the search results ranging from 1-10.
                                     `)
                         .setTimestamp();
-                    message.channel.send(sembed).then(message2 => message2.delete(10000))
+                    message.channel.send(sembed).then(message2 => message2.delete({timeout: 10000}))
                     try {
                         var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
-                            maxMatches: 1,
+                            max: 1,
                             time: 10000,
                             errors: ['time']
                         });
@@ -74,11 +74,11 @@ module.exports = {
                     return message.channel.send('🆘 I could not obtain any search results.');
                 }
             }
-            return handleVideo(video, message, voiceChannel);
+            return handleVideo(video, message, channel);
 
         }
 
-        async function handleVideo(video, message, voiceChannel, playlist = false) {
+        async function handleVideo(video, message, channel, playlist = false) {
             const serverQueue = ops.queue.get(message.guild.id);
             const song = {
                 id: video.id,
@@ -88,17 +88,18 @@ module.exports = {
             };
             if (!serverQueue) {
                 const queueConstruct = {
-                    textchannel: message.channel,
-                    voiceChannel: voiceChannel,
+                    textChannel: message.channel,
+                    voiceChannel: channel,
                     connection: null,
                     songs: [],
                     volume: 2,
-                    playing: true
+                    playing: true,
+                    loop: false
                 };
                 ops.queue.set(message.guild.id, queueConstruct);
                 queueConstruct.songs.push(song);
                 try {
-                    var connection = await voiceChannel.join();
+                    var connection = await channel.join();
                     queueConstruct.connection = connection;
                     play(message.guild, queueConstruct.songs[0], message);
                 } catch (error) {
@@ -112,13 +113,13 @@ module.exports = {
                 console.log(serverQueue.songs);
                 if (playlist) return undefined;
                 else {
-                    const embed = new RichEmbed()
+                    const embed = new MessageEmbed()
                         .setColor("GREEN")
                         .setTitle("Added To Queue")
                         .setThumbnail(song.thumbnail)
                         .setTimestamp()
                         .setDescription(`**${song.title}** has been added to queue!`)
-                        .setFooter(message.member.displayName, message.author.displayAvatarURL);
+                        .setFooter(message.member.displayName, message.author.displayAvatarURL());
                     message.channel.send(embed)
                 }
             }
@@ -133,10 +134,12 @@ module.exports = {
                 return;
             }
         
-            const dispatcher = serverQueue.connection.playStream(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 20 }, {bitrate: 192000 }))
-                .on('end', reason => {
-                    if (reason === 'Stream is not generating enough quickly') console.log(reason);
-                    else console.log('Song ended');
+            const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 25, quality: "highestaudio"}))
+                .on('finish', () => {
+                    if (serverQueue.loop) {
+                        serverQueue.songs.push(serverQueue.songs.shift());
+                        return play(guild, serverQueue.songs[0], msg)
+                    }
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0], msg)
         
@@ -144,15 +147,15 @@ module.exports = {
                 .on('error', error => console.error(error));
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         
-            const embed = new RichEmbed()
+            const embed = new MessageEmbed()
                 .setColor("GREEN")
                 .setTitle('Now Playing\n')
                 .setThumbnail(song.thumbnail)
                 .setTimestamp()
                 .setDescription(`🎵 Now playing:\n **${song.title}** 🎵`)
-                .setFooter(msg.member.displayName, msg.author.displayAvatarURL);
-            serverQueue.textchannel.send(embed);
+                .setFooter(msg.member.displayName, msg.author.displayAvatarURL());
+            serverQueue.textChannel.send(embed);
         
         };
     }
-}
+};

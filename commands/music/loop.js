@@ -4,7 +4,7 @@ module.exports = {
         aliases: ["repeat"],
         category: "music",
         description: 'Repeats all songs in the queue',
-        usage: "loops the music",
+        usage: " ",
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {

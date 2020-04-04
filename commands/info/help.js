@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { readdirSync } = require("fs")
 const { stripIndents } = require("common-tags")
 const { cyan } = require("../../colours.json")
@@ -9,31 +9,31 @@ module.exports = {
     config: {
         name: "help",
         aliases: ["h"],
-        usage: ", h",
+        usage: " ",
         category: "info",
         description: "Displays all commands that the bot has.",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setColor(cyan)
-            .setAuthor(`${message.guild.me.displayName} Help`, message.guild.iconURL)
-            .setThumbnail(bot.user.displayAvatarURL)
+            .setAuthor(`${message.guild.me.displayName} Help`, message.guild.iconURL())
+            .setThumbnail(bot.user.displayAvatarURL())
 
         if (!args[0]) {
 
-            const sembed = new RichEmbed()
-            .setAuthor(`${message.guild.me.displayName}`, message.guild.iconURL)
+            const sembed = new MessageEmbed()
+            .setAuthor(`${message.guild.me.displayName}`, message.guild.iconURL())
             .setColor("GREEN")
             .setDescription('Message has been sent to you dms!')
             message.channel.send(sembed).then(msg => {
-                msg.delete(10000);
+                msg.delete({timeout: 10000});
             })
 
             const categories = readdirSync("./commands/")
 
             embed.setDescription(`These are the available commands for ${message.guild.me.displayName}\nThe bot prefix is: **${prefix}**`)
-            embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${bot.commands.size}`, bot.user.displayAvatarURL);
+            embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${bot.commands.size}`, bot.user.displayAvatarURL());
 
             categories.forEach(category => {
                 const dir = bot.commands.filter(c => c.config.category === category)
@@ -57,7 +57,7 @@ module.exports = {
             ** Usage:** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}\n
             ** Accessible by:** ${command.accessableby || "everyone"}\n
             ** Aliases:** ${command.aliases ? command.aliases.join(", ") : "None."}`)
-            embed.setFooter(message.guild.name, message.guild.iconURL)
+            embed.setFooter(message.guild.name, message.guild.iconURL())
 
             return message.channel.send(embed)
         }

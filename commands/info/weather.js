@@ -1,10 +1,10 @@
+const { MessageEmbed } = require('discord.js');
 const weather = require('weather-js');
-const { RichEmbed } = require('discord.js');
 
 module.exports = {
     config: {
         name: "weather",
-        noalias: "No Aliases",
+        aliases: "",
         category: "info",
         description: "Shows weather of a city",
         usage: "[city name]",
@@ -24,7 +24,7 @@ module.exports = {
             var current = result[0].current;
             var location = result[0].location;
 
-            const embed = new RichEmbed()
+            const embed = new MessageEmbed()
                 .setDescription(`**${current.skytext}**`)
                 .setAuthor(`Weather for ${current.observationpoint}`)
                 .setThumbnail(current.imageUrl)
@@ -37,7 +37,7 @@ module.exports = {
                 .addField('Humidity', `${current.humidity}%`, true)
                 .addField('Date', `${current.date}`, true)
                 .addField('Day', `${current.day}`, true)
-                .setFooter(message.member.displayName, message.author.displayAvatarURL)
+                .setFooter(message.member.displayName, message.author.displayAvatarURL())
                 .setTimestamp()
 
             message.channel.send({embed})

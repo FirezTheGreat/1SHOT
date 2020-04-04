@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     config: {
@@ -11,26 +11,32 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-        if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply("❌ You do not have permissions to kick members!");
+        if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("❌ You do not have permissions to kick members!");
 
-        var kickMember = message.mentions.members.first() || bot.users.get(args[0]);
-        if (!kickMember) return message.channel.send("Please provide a name to kick");
+        var kickMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        if (!kickMember) return message.channel.send("**ID mentioned is not in guild**");
 
-        var reason = args.slice(1).join(" ");
+        var reason = args.slice(1).join(" ") || "No Reason!";
 
-        if (!message.guild.me.hasPermission("KICK_MEMBERS")) return message.reply("❌ I do not have permissions to kick members!");
+        if (!message.guild.me.hasPermission("KICK_MEMBERS")) return message.channel.send("❌ I do not have permissions to kick members!");
+        const sembed2 = new MessageEmbed()
+            .setColor("RED")
+            .setDescription(`Hello, you have been kicked from ${message.guild.name} for: ${reason || "No Reason!"}`)
+            .setFooter(message.guild.name, message.guild.iconURL())
+        kickMember.send(sembed2).then(() => 
+    kickMember.kick()).catch(err => console.log(err))
       
-        var sembed = new RichEmbed()
+        var sembed = new MessageEmbed()
             .setColor("GREEN")
-            .setAuthor(message.guild.name, message.guild.iconURL)
+            .setAuthor(message.guild.name, message.guild.iconURL())
             .setDescription(`**${kickMember.user.username}** has been kicked`)
         message.channel.send(sembed);
 
-        const embed = new RichEmbed()
-            .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL)
+        const embed = new MessageEmbed()
+            .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL())
             .setColor("#ff0000")
-            .setThumbnail(kickMember.user.displayAvatarURL)
-            .setFooter(message.guild.name, message.guild.iconURL)
+            .setThumbnail(kickMember.user.displayAvatarURL())
+            .setFooter(message.guild.name, message.guild.iconURL())
             .addField("**Moderation**", "kick")
             .addField("**User Kicked**", kickMember.user.username)
             .addField("**Kicked By**", message.author.username)
@@ -38,7 +44,7 @@ module.exports = {
             .addField("**Date**", message.createdAt.toLocaleString())
             .setTimestamp();
 
-        var sChannel = message.guild.channels.find(c => c.name === "modlogs")
+        var sChannel = message.guild.channels.cache.find(c => c.name === "modlogs")
         sChannel.send(embed)
 
     }
