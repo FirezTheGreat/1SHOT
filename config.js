@@ -1,13 +1,13 @@
-exports.TOKEN = 'Njk0MTkxMjE1MDYyNjc5NjA0.XogeOw.ARKKzrOy8b8iVSiNCpvgftafRX8';
+exports.TOKEN = '';
 
-exports.PREFIX = '.';
+exports.PREFIX = '';
 
-exports.GOOGLE_API_KEY = 'AIzaSyAfUiQKYSAUzyYzaj3KW5HDT_eY2X9-thk';
+exports.GOOGLE_API_KEY = '';
 
-exports.GENIUS_API_KEY = 'knEnTlHs5uyLrF89awiQmmauDe7IRwXTIZzOMRRgW5Dv4aBurR6bPSXM0KbigFiX';
+exports.GENIUS_API_KEY = '';
 
-exports.yandex_API = 'trnsl.1.1.20200408T080907Z.3851e1bd73bdce93.137eef28835a650cc1a1daa494c0a2bda1eb0272';
+exports.yandex_API = '';
 
-exports.news_API = 'b6b29b928e8f42e78166d91d416d1f59';
+exports.news_API = '';
 
-exports.tenor_API = 'JUUVZ14UGB5C';
+exports.tenor_API = '';
