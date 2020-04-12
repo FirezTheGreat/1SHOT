@@ -1,10 +1,10 @@
-const { MessageEmbed } = require('discord.js');
 const weather = require('weather-js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     config: {
         name: "weather",
-        aliases: "",
+        noalias: "",
         category: "info",
         description: "Shows weather of a city",
         usage: "[city name]",
@@ -17,7 +17,7 @@ module.exports = {
         if(err) message.channel.send(err);
 
         if(result.length === 0) {
-            message.channel.send('**Please enter a valid location.**')
+            message.channel.send('**Please Enter A Valid Location.**')
             return undefined;
         }
 
@@ -45,3 +45,4 @@ module.exports = {
         });
     }
 }
+

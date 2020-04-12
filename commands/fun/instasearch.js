@@ -14,8 +14,8 @@ module.exports = {
         const name = args.join(" ");
 
         if (!name) {
-            return message.channel.send("Maybe it's useful to actually search for someone...!")
-                .then(m => m.delete(5000));
+            return message.channel.send("**Please Enter A Name!**")
+                .then(m => m.delete({timeout: 5000}));
         }
 
         const url = `https://instagram.com/${name}/?__a=1`;

@@ -4,27 +4,27 @@ module.exports = {
 
         var target = message.guild.members.cache.get(toFind);
 
-        if(!target && message.mentions.members)
-        target = message.mentions.members.first();
+        if (!target && message.mentions.members)
+            target = message.mentions.members.first();
 
-        if(!target && toFind) {
+        if (!target && toFind) {
             target = message.guild.members.cache.find(member => {
                 return member.displayName.toLowerCase().includes(toFind) ||
-                member.user.tag.toLowerCase().includes(toFind)
+                    member.user.tag.toLowerCase().includes(toFind)
             });
         }
 
-        if(!target)
+        if (!target)
             target = message.member;
 
-            return target;
+        return target;
     },
 
-    formatDate: function(date) {
+    formatDate: function (date) {
         return new Intl.DateTimeFormat('en-US').format(date);
     },
 
-    promptMessage: async function(message, author, time, validReactions) {
+    promptMessage: async function (message, author, time, validReactions) {
         time *= 1000;
 
         for (const reaction of validReactions) await message.react(reaction);
@@ -32,7 +32,7 @@ module.exports = {
         const filter = (reaction, user) => validReactions.includes(reaction.emoji.name) && user.id === author.id;
 
         return message
-            .awaitReactions(filter, { max: 1, time: time})
+            .awaitReactions(filter, { max: 1, time: time })
             .then(collected => collected.first() && collected.first().emoji.name);
     }
 }

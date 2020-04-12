@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     config: {
         name: "ban",
-        aliases: ["b", "banish", "remove"],
+        aliases: ["b", "banish"],
         category: "moderation",
         description: "Bans the user",
         usage: "[username | <reason> (optional)]",
@@ -11,14 +11,29 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-        if (!message.member.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permissions to perform this task!");
+        if (!message.member.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**You Dont Have The Permissions To Ban Users!**");
 
         var banMember = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        if (!banMember) return message.channel.send("*User is not in the guild");
+        if (!banMember) return message.channel.send("**User is not in the guild**");
+
+        if (banMember === message.member) return message.channel.send("**You Cannot Ban Yourself**")
 
         var reason = args.slice(1).join(" ");
 
-        if (!message.guild.me.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command")
+        if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command")
+
+        let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
+        if (!createChannel) {
+            createChannel = await message.guild.channels.create('modlogs', {
+                type: 'text',
+                permissionOverwrites: [
+                    {
+                        id: message.guild.id,
+                        deny: ['VIEW_CHANNEL']
+                    }
+                ]
+            })
+        }
 
         banMember.send(`Hello, you have been banned from ${message.guild.name} for: ${reason || "No Reason"}`).then(() =>
             message.guild.members.ban(banMember, { days: 1, reason: reason })).catch(err => console.log(err))

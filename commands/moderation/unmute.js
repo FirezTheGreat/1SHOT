@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js")
-const { redlight } = require("../../colours.json");
+const { redlight } = require("../../JSON/colours.json");
 
 module.exports = {
     config: {
@@ -11,18 +11,32 @@ module.exports = {
         category: "moderation",
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission("MANAGE_ROLES") || !message.guild.owner) return message.channel.send("You dont have permission to use this command.");
+        if (!message.member.hasPermission("ADMINISTRATOR") || !message.guild.owner) return message.channel.send("**You Dont Have The Permissions To Unmute Someone!**");
 
-        if (!message.guild.me.hasPermission(["MANAGE_ROLES", "ADMINISTRATOR"])) return message.channel.send("I don't have permission to add roles!")
+        if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**I Don't Have Permissions To Unmute Someone!**")
 
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return message.channel.send("Please name a user!");
+
+        if (!mutee.roles.cache.has("muted")) return message.channel.send("**The user is not Muted!**")
 
         let reason = args.slice(1).join(" ");
 
         let muterole = message.guild.roles.cache.find(r => r.name === "muted")
         if (!muterole) return message.channel.send("There is no mute role to remove!")
 
+        let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
+        if (!createChannel) {
+            createChannel = await message.guild.channels.create('modlogs', {
+                type: 'text',
+                permissionOverwrites: [
+                    {
+                        id: message.guild.id,
+                        deny: ['VIEW_CHANNEL']
+                    }
+                ]
+            })
+        }
         mutee.roles.remove(muterole.id).then(() => {
             mutee.send(`Hello, you have been unmuted in ${message.guild.name} for ${reason || "**No Reason**"}`).catch(err => console.log(err))
 

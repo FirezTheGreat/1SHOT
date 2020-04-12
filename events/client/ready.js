@@ -4,5 +4,5 @@ module.exports = async bot => {
     
     var activities = [ `${bot.guilds.cache.size} server`, `${bot.channels.cache.size} channels!`, `${bot.users.cache.size} users!` ], i = 0;
     setInterval(() => bot.user.setActivity(`${PREFIX}help | ${activities[i++ % activities.length]}`, { type: "WATCHING" }),5000)
-}
-
+    
+};

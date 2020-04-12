@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const { promptMessage } = require("../../functions");
-const { white } = require("../../colours.json")
 
 const chooseArr = ["🗻", "📰", "✂"];
 
@@ -15,7 +14,8 @@ module.exports = {
     },
     run: async (bot, message, args) => {
         const embed = new MessageEmbed()
-            .setColor(white)
+            .setColor("GREEN")
+            .setAuthor(message.member.displayName, message.author.displayAvatarURL())
             .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL())
             .setDescription("Add a reaction to one of those emojis to play the game!")
             .setTimestamp();

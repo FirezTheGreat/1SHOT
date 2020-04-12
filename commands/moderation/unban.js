@@ -11,21 +11,34 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-        if (!message.member.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("You dont have permission to perform this command!")
+        if (!message.member.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**You Dont Have The Permissions To Unban Someone!**")
 
-        if (isNaN(args[0])) return message.channel.send("You need to provide an ID.")
+        if (isNaN(args[0])) return message.channel.send("**You Need To Provide An ID!**")
         let bannedMember = await bot.users.fetch(args[0])
-        if (!bannedMember) return message.channel.send("Please provide a user id to unban someone!")
+        if (!bannedMember) return message.channel.send("**Please Provide A User ID To Unban Someone!**")
 
         let reason = args.slice(1).join(" ")
 
-        if (!message.guild.me.hasPermission(["BAN_MEMBERS", "ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command!")
+        let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
+        if (!createChannel) {
+            createChannel = await message.guild.channels.create('modlogs', {
+                type: 'text',
+                permissionOverwrites: [
+                    {
+                        id: message.guild.id,
+                        deny: ['VIEW_CHANNEL']
+                    }
+                ]
+            })
+        }
+
+        if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**I Don't Have Permissions To Unban Someone!**")
         try {
             message.guild.members.unban(bannedMember, reason)
             var sembed = new MessageEmbed()
                 .setColor("GREEN")
                 .setAuthor(message.guild.name, message.guild.iconURL())
-                .setDescription(`${bannedMember.tag} has been unbanned`)
+                .setDescription(`**${bannedMember.tag} has been unbanned**`)
             message.channel.send(sembed)
         } catch (e) {
             console.log(e.message)

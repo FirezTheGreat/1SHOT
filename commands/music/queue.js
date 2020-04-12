@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+
 module.exports = {
     config: {
         name: 'queue',
@@ -8,7 +9,12 @@ module.exports = {
         usage: " ",
         accessableby: "everyone"
     },
-    run: async(bot, message, args, ops) => {
+    run: async (bot, message, args, ops) => {
+        const { channel } = message.member.voice;
+        if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to see queue!');
+        if (message.guild.me.voice.channel !== message.member.voice.channel) {
+            return message.channel.send("**You Have To Be In The Same Channel With The Bot!**");
+        };
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
         const embed = new MessageEmbed()

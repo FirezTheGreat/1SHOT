@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js")
-const { greenlight } = require("../../colours.json")
+const { greenlight } = require("../../JSON/colours.json")
 
 module.exports = {
     config: {

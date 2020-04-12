@@ -11,21 +11,35 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-        if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send("❌ You do not have permissions to kick members!");
+        if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("**You do not have permissions to kick members!**");
 
         var kickMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!kickMember) return message.channel.send("**ID mentioned is not in guild**");
 
         var reason = args.slice(1).join(" ") || "No Reason!";
 
-        if (!message.guild.me.hasPermission("KICK_MEMBERS")) return message.channel.send("❌ I do not have permissions to kick members!");
+        if (!message.guild.me.hasPermission("ADMINISTRATOR")) return message.channel.send("**I do not have permissions to kick members!**");
+
+        let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
+        if (!createChannel) {
+            createChannel = await message.guild.channels.create('modlogs', {
+                type: 'text',
+                permissionOverwrites: [
+                    {
+                        id: message.guild.id,
+                        deny: ['VIEW_CHANNEL']
+                    }
+                ]
+            })
+        }
+
         const sembed2 = new MessageEmbed()
             .setColor("RED")
             .setDescription(`Hello, you have been kicked from ${message.guild.name} for: ${reason || "No Reason!"}`)
             .setFooter(message.guild.name, message.guild.iconURL())
-        kickMember.send(sembed2).then(() => 
-    kickMember.kick()).catch(err => console.log(err))
-      
+        kickMember.send(sembed2).then(() =>
+            kickMember.kick()).catch(err => console.log(err))
+
         var sembed = new MessageEmbed()
             .setColor("GREEN")
             .setAuthor(message.guild.name, message.guild.iconURL())

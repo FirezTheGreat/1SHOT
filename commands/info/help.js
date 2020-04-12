@@ -1,9 +1,9 @@
 const { MessageEmbed } = require("discord.js");
 const { readdirSync } = require("fs")
 const { stripIndents } = require("common-tags")
-const { cyan } = require("../../colours.json")
+const { cyan } = require("../../JSON/colours.json")
 
-const prefix = "!";
+const prefix = ".";
 
 module.exports = {
     config: {
@@ -62,4 +62,4 @@ module.exports = {
             return message.channel.send(embed)
         }
     }
-}
+};

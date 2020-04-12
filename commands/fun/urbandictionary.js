@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js');
 const urban = require('relevant-urban');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     config: {
@@ -12,7 +12,7 @@ module.exports = {
     },
     run: async (bot, message, args) => {
         if(!args[0])
-        return undefined;
+        return message.channel.send("Please Enter Something To Search");
 
         let image = "http://cdn.marketplaceimages.windowsphone.com/v8/images/5c942bfe-6c90-45b0-8cd7-1f2129c6e319?imageType=ws_icon_medium";
         try {

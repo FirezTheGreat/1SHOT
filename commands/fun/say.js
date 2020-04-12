@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { greenlight } = require("../../colours.json")
+const { greenlight } = require("../../JSON/colours.json")
 
 module.exports = {
     config: {
@@ -14,14 +14,12 @@ module.exports = {
 
         if (args.length === 0)
             return message.channel.send("No")
-        message.delete({timeout: 1000})
+        message.delete({ timeout: 1000 })
 
         const embed = new MessageEmbed()
             .setDescription(args.join(" "))
             .setColor(greenlight);
 
         message.channel.send(embed)
-
-
     }
 }

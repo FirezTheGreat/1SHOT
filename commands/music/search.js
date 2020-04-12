@@ -14,8 +14,6 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
-
-
         const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
         const searchString = args.slice(1).join(' ');
 
@@ -56,7 +54,7 @@ module.exports = {
                     \nPlease provide a value to select one of the search results ranging from 1-10.
                                     `)
                         .setTimestamp();
-                    message.channel.send(sembed).then(message2 => message2.delete({timeout: 10000}))
+                    message.channel.send(sembed).then(message2 => message2.delete({ timeout: 10000 }))
                     try {
                         var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
                             max: 1,
@@ -125,16 +123,16 @@ module.exports = {
             }
             return undefined;
         }
-        async function play (guild, song, msg) {
+        async function play(guild, song, msg) {
             const serverQueue = ops.queue.get(guild.id);
-        
+
             if (!song) {
                 serverQueue.voiceChannel.leave()
                 ops.queue.delete(guild.id);
                 return;
             }
-        
-            const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 25, quality: "highestaudio"}))
+
+            const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 25, quality: "highestaudio" }))
                 .on('finish', () => {
                     if (serverQueue.loop) {
                         serverQueue.songs.push(serverQueue.songs.shift());
@@ -142,11 +140,11 @@ module.exports = {
                     }
                     serverQueue.songs.shift();
                     play(guild, serverQueue.songs[0], msg)
-        
+
                 })
                 .on('error', error => console.error(error));
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-        
+
             const embed = new MessageEmbed()
                 .setColor("GREEN")
                 .setTitle('Now Playing\n')
@@ -155,7 +153,7 @@ module.exports = {
                 .setDescription(`🎵 Now playing:\n **${song.title}** 🎵`)
                 .setFooter(msg.member.displayName, msg.author.displayAvatarURL());
             serverQueue.textChannel.send(embed);
-        
+
         };
     }
 };

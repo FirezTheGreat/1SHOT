@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js');
-
 module.exports = {
     config: {
         name: "status",
@@ -11,27 +10,28 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-        let user = message.mentions.users.first() || message.author;
+        let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member
+
         if (!user.presence.activities.length) {
-        const sembed = new MessageEmbed()
-            .setAuthor(user.username, user.displayAvatarURL())
-            .setColor("GREEN")
-            .setThumbnail(user.displayAvatarURL())
-            .addField("**No Status**", 'This user does not have any custom status!')
-            .setFooter(message.guild.name, message.guild.iconURL())
-            .setTimestamp()
-          message.channel.send(sembed)
-          return undefined;
+            const sembed = new MessageEmbed()
+                .setAuthor(user.user.username, user.user.displayAvatarURL({ dynamic: true }))
+                .setColor("GREEN")
+                .setThumbnail(user.user.displayAvatarURL())
+                .addField("**No Status**", 'This user does not have any custom status!')
+                .setFooter(message.guild.name, message.guild.iconURL())
+                .setTimestamp()
+            message.channel.send(sembed)
+            return undefined;
         }
 
         user.presence.activities.forEach((activity) => {
 
             if (activity.type === 'CUSTOM_STATUS') {
                 const embed = new MessageEmbed()
-                    .setAuthor(user.username, user.displayAvatarURL())
+                    .setAuthor(user.user.username, user.user.displayAvatarURL({ dynamic: true }))
                     .setColor("GREEN")
-                    .addField("**Status**", `Custom status ${activity.emoji || "No Emoji"} | ${activity.state}`)
-                    .setThumbnail(user.displayAvatarURL())
+                    .addField("**Status**", `**Custom status** -\n${activity.emoji || "No Emoji"} | ${activity.state}`)
+                    .setThumbnail(user.user.displayAvatarURL())
                     .setFooter(message.guild.name, message.guild.iconURL())
                     .setTimestamp()
                 message.channel.send(embed)
@@ -40,16 +40,16 @@ module.exports = {
                 let name1 = activity.name
                 let details1 = activity.details
                 let state1 = activity.state
-                let image = user.displayAvatarURL()
+                let image = user.user.displayAvatarURL({ dynamic: true })
 
                 const sembed = new MessageEmbed()
-                    .setAuthor(`${user.username}'s Activity`)
+                    .setAuthor(`${user.user.username}'s Activity`)
                     .setColor(0xFFFF00)
                     .setThumbnail(image)
                     .addField("**Type**", "Playing")
                     .addField("**App**", `${name1}`)
-                    .addField("**Details**", `${details1}`)
-                    .addField("**Working on**", `${state1}`)
+                    .addField("**Details**", `${details1 || "No Details"}`)
+                    .addField("**Working on**", `${state1 || "No Details"}`)
                 message.channel.send(sembed);
             }
             else if (activity.type === 'LISTENING' && activity.name === 'Spotify' && activity.assets !== null) {
@@ -69,7 +69,7 @@ module.exports = {
                     .addField('Album', trackAlbum, true)
                     .addField('Author', trackAuthor, false)
                     .addField('Listen to Track', `${trackURL}`, false)
-                    .setFooter(message.member.displayName, message.author.displayAvatarURL())
+                    .setFooter(user.displayName, user.user.displayAvatarURL({ dynamic: true }))
                 message.channel.send(embed);
             }
         })
