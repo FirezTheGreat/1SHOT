@@ -27,7 +27,6 @@ module.exports = {
       '👀 Searching for lyrics 👀'
     );
 
-    // get song id
     let url = `https://api.genius.com/search?q=${encodeURI(songName)}`;
 
     const headers = {
@@ -39,7 +38,6 @@ module.exports = {
       const songID = result.response.hits[0].result.id
       if (!songID) return message.channel.send("not available")
 
-      // get lyrics
       url = `https://api.genius.com/songs/${songID}`;
       body = await fetch(url, { headers });
       result = await body.json();
@@ -47,7 +45,7 @@ module.exports = {
       const song = result.response.song;
 
       let lyrics = await getLyrics(song.url);
-      lyrics = lyrics.replace(/(\[.+\])/g, '');
+      lyrics = lyrics.replace(/lyrics|lyric|lyrical|official music video|\(official music video\)|audio|official|official video|official video hd|official hd video|offical video music|\(offical video music\)|extended|hd|(\[.+\])/gi, "");
       if (lyrics.length > 8192) {
         return sentMessage.edit("Not Availble.");
       } if (lyrics.length < 2048) {
@@ -62,7 +60,6 @@ module.exports = {
         const secondLyricsEmbed = new MessageEmbed()
           .setColor('GREEN')
           .setDescription(lyrics.slice(2048, 4096));
-
         sentMessage.edit('', firstLyricsEmbed);
         message.channel.send('', secondLyricsEmbed);
       } if (lyrics.length > 4096 && lyrics.length < 6144) {
@@ -99,7 +96,7 @@ module.exports = {
       }
     } catch (e) {
       return sentMessage.edit(
-        'Not Available. Blame Genius API'
+        'Not Available.'
       );
     }
 

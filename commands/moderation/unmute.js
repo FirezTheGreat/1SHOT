@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js")
 const { redlight } = require("../../JSON/colours.json");
+const db = require('quick.db');
 
 module.exports = {
     config: {
@@ -18,13 +19,11 @@ module.exports = {
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return message.channel.send("Please name a user!");
 
-        if (!mutee.roles.cache.has("muted")) return message.channel.send("**The user is not Muted!**")
-
         let reason = args.slice(1).join(" ");
 
         let muterole = message.guild.roles.cache.find(r => r.name === "muted")
         if (!muterole) return message.channel.send("There is no mute role to remove!")
-
+        if (!mutee.roles.cache.has(muterole.id)) return message.channel.send("**User is not Muted!**")
         let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
         if (!createChannel) {
             createChannel = await message.guild.channels.create('modlogs', {
@@ -36,9 +35,11 @@ module.exports = {
                     }
                 ]
             })
-        }
+        };
         mutee.roles.remove(muterole.id).then(() => {
-            mutee.send(`Hello, you have been unmuted in ${message.guild.name} for ${reason || "**No Reason**"}`).catch(err => console.log(err))
+        mutee.send(`Hello, you have been unmuted in ${message.guild.name} for ${reason || "**No Reason**"}`).catch(err => console.log(err))
+        let roleadds = db.fetch(`muteeid_${message.guild.id}_${mutee.id}`)
+        mutee.roles.add(roleadds)
 
             const sembed = new MessageEmbed()
                 .setColor("GREEN")

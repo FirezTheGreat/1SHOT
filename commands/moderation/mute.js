@@ -1,5 +1,6 @@
-const { MessageEmbed } = require("discord.js")
+const { MessageEmbed } = require("discord.js");
 const { redlight } = require("../../JSON/colours.json");
+const db = require('quick.db');
 
 module.exports = {
     config: {
@@ -11,15 +12,18 @@ module.exports = {
         noalias: "No Aliases"
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission("ADMINISTRATOR") || !message.guild.owner) return message.channel.send("**You Dont Have Permmissions To Mute Someone!**");
+        if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("**You Dont Have Permmissions To Mute Someone!**");
 
         if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**I Don't Have Permissions To Mute Someone!**")
 
         let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!mutee) return message.channel.send("**Please Enter A User To Be Muted!**");
         let reason = args.slice(1).join(" ");
-
+        const userRoles = mutee.roles.cache
+            .filter(r => r.id !== message.guild.id)
+            .map(r => r.id)
         let muterole = message.guild.roles.cache.find(r => r.name === "muted")
+        if(mutee.roles.cache.has(muterole.id)) return message.channel.send("User is Already Muted!")
         if (!muterole) {
             try {
                 muterole = await message.guild.roles.create({
@@ -42,9 +46,9 @@ module.exports = {
             } catch (e) {
                 console.log(e);
             }
-        }
-        mutee.roles.set([])
-        mutee.roles.add(muterole.id).then(() => {
+        };
+        db.set(`muteeid_${message.guild.id}_${mutee.id}`, userRoles)
+        mutee.roles.set([muterole.id]).then(() => {
             mutee.send(`Hello, you have been muted in ${message.guild.name} for ${reason || "No Reason"}`).catch(err => console.log(err))
             const sembed = new MessageEmbed()
                 .setColor("GREEN")
@@ -75,6 +79,7 @@ module.exports = {
             .addField("Moderator:", message.author.username)
             .addField("Reason:", reason || "No Reason")
             .addField("Date:", message.createdAt.toLocaleString())
+            .setFooter(message.member.displayName, message.author.displayAvatarURL())
 
         let sChannel = message.guild.channels.cache.find(c => c.name === "modlogs")
         sChannel.send(embed)

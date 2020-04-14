@@ -11,7 +11,7 @@ module.exports = {
         accessableby: "Administrator, Owner"
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission("ADMINISTRATOR", "MANAGE_GUILD")) return message.channel.send("❌ You do not have permissions to add money!");
+        if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("❌ You do not have permissions to add money!");
 
         let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 

@@ -132,7 +132,7 @@ module.exports = {
                 return;
             }
 
-            const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 25, quality: "highestaudio" }))
+            const dispatcher = serverQueue.connection.play(await ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 20, quality: "highestaudio" }))
                 .on('finish', () => {
                     if (serverQueue.loop) {
                         serverQueue.songs.push(serverQueue.songs.shift());

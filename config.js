@@ -11,3 +11,5 @@ exports.yandex_API = '';
 exports.news_API = '';
 
 exports.tenor_API = '';
+
+exports.AME_API = ''

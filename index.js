@@ -36,7 +36,7 @@ bot.on('message', message => {
     if (message.content === "Hello") {
         message.channel.send('Hi There!');
     }
-    if (!message.channel.type != "text") return undefined;
+    if (message.channel.type != "text") return undefined;
     db.add(`messages_${message.guild.id}_${message.author.id}`, 1)
     let messagefetch = db.fetch(`messages_${message.guild.id}_${message.author.id}`)
 
@@ -58,6 +58,7 @@ bot.on('message', message => {
         let levelfetch = db.fetch(`level_${message.guild.id}_${message.author.id}`)
 
         let levelembed = new MessageEmbed()
+            .setColor("GREEN")
             .setDescription(`${message.author}, You have leveled up to level ${levelfetch}`)
         message.channel.send(levelembed)
     }

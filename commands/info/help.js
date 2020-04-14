@@ -32,7 +32,7 @@ module.exports = {
 
             const categories = readdirSync("./commands/")
 
-            embed.setDescription(`These are the available commands for ${message.guild.me.displayName}\nThe bot prefix is: **${prefix}**`)
+            embed.setDescription(`These are the available commands for ${message.guild.me.displayName}\nThe bot prefix is **\`${prefix}\`**`)
             embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${bot.commands.size}`, bot.user.displayAvatarURL());
 
             categories.forEach(category => {
@@ -51,7 +51,7 @@ module.exports = {
             if (!command) return message.channel.send(embed.setTitle("Invalid Command.").setDescription(`Do \`${prefix}help\` for the list of the commands.`))
             command = command.config
 
-            embed.setDescription(stripIndents `The bot's prefix is: \`${prefix}\`\n
+            embed.setDescription(stripIndents `The bot's prefix is \`${prefix}\`\n
             ** Command:** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}\n
             ** Description:** ${command.description || "No Description provided."}\n
             ** Usage:** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}\n

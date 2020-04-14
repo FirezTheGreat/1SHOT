@@ -3,7 +3,7 @@ module.exports = {
         name: "stopmusictrivia",
         aliases: ["st", "smt"],
         category: "music",
-        description: "not now",
+        description: "Stops Current Trivia",
         usage: " ",
         accessableby: "everyone"
     },

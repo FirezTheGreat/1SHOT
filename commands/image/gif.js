@@ -5,7 +5,7 @@ const { tenor_API } = require('../../config.js');
 module.exports = {
     config: {
         name: 'gif',
-        category: 'fun',
+        category: 'image',
         aliases: ['search-gif', 'search-gifs'],
         description: 'Provide a query and I will return a gif!',
         usage: "[query]",

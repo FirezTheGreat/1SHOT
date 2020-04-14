@@ -10,6 +10,7 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
+        let perms = "ADMINISTRATOR" || "MANAGE_GUILD" || "MANAGE_MESSAGES" || "MANAGE_ROLES"
         if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("**You Dont Have Permissions To Change Nickname!**");
 
         if (!message.guild.me.hasPermission("ADMINISTRATOR")) return message.channel.send("**I Dont Have Permissions To Change Nickname!**");
@@ -17,14 +18,16 @@ module.exports = {
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
         if (!member) return message.channel.send("**Please Enter A Username!**");
 
-        if (member.hasPermission("ADMINISTRATOR")) return message.channel.send("**Cannot Change Nickname Of That User!**")
+        if (member.hasPermission(perms)) return message.channel.send("**Cannot Change Nickname Of That User!**")
 
         if (!args[1]) return message.channel.send("**Please Enter A Nickname**");
 
-        member.setNickname(args[1])
+        let nick = args.slice(1).join(' ');
+
+        member.setNickname(nick)
         const embed = new MessageEmbed()
-            .setColor("RED")
-            .setDescription(`**Changed Nickname of ${member.displayName} to ${args[1]}**`)
+            .setColor("GREEN")
+            .setDescription(`**Changed Nickname of ${member.displayName} to ${nick}**`)
             .setAuthor(message.guild.name, message.guild.iconURL())
         message.channel.send(embed)
 

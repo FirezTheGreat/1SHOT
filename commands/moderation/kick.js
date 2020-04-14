@@ -15,6 +15,7 @@ module.exports = {
 
         var kickMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!kickMember) return message.channel.send("**ID mentioned is not in guild**");
+        if (!kickMember.kickable) return message.channel.send("Cant Kick That User")
 
         var reason = args.slice(1).join(" ") || "No Reason!";
 

@@ -19,7 +19,7 @@ module.exports = {
         const joined = formatDate(member.joinedAt);
         const roles = member.roles.cache
             .filter(r => r.id !== message.guild.id)
-            .map(r => r).join(", ") || 'none';
+            .map(r => r.name).join(", ") || 'none';
         const created = formatDate(member.user.createdAt);
 
         const embed = new MessageEmbed()

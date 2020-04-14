@@ -95,8 +95,8 @@ module.exports = {
                             highWaterMark: 1 << 25
                         })
                     )
-                    .on('start', () => {
-                        dispatcher.setVolumeLogarithmic(queueConstruct.volume);
+                    .on('start', function() {
+                        dispatcher.setVolume(queueConstruct.volume);
                         let songNameFound = false;
                         let songSingerFound = false;
 
@@ -183,7 +183,7 @@ module.exports = {
                             }
                         });
 
-                        collector.on('end', () => {
+                        collector.on('end', function() {
                             if (triviaData.wasTriviaEndCalled) {
                                 triviaData.wasTriviaEndCalled = false;
                                 return;
@@ -212,7 +212,7 @@ module.exports = {
                             return;
                         });
                     })
-                    .on('finish', () => {
+                    .on('finish', function() {
                         if (queue.length >= 1) {
                             return playQuizSong(queue, message);
                         } else {

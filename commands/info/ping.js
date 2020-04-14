@@ -1,4 +1,6 @@
-module.exports = { 
+const { MessageEmbed } = require('discord.js');
+
+module.exports = {
     config: {
         name: "ping",
         description: "PONG! Displays the api & bot latency",
@@ -9,12 +11,13 @@ module.exports = {
     },
     run: async (bot, message, args) => {
 
-    message.channel.send("Pinging...").then(m => {
-        let ping = m.createdTimestamp - message.createdTimestamp
-        let choices = ["Is this really my ping", "Is it okay? I cant look", "I hope it isnt bad"]
-        let response = choices[Math.floor(Math.random() * choices.length)]
-
-        m.edit(`${response}: Bot Latency: \`${ping}\`, API Latency: \`${Math.round(bot.ping)}\``)
-    })
-  }
-}
+        message.channel.send("**Pinging...**").then(m => {
+            let ping = m.createdTimestamp - message.createdTimestamp
+            const embed = new MessageEmbed()
+                .setColor("GREEN")
+                .setDescription(`<:hourglass_flowing_sand:699128011743690794> ${ping}\n\n💓 ${Math.round(bot.ws.ping)}`)
+            message.channel.send(embed)
+            m.delete()
+        })
+    }
+};

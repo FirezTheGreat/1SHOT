@@ -19,7 +19,7 @@ module.exports = {
         if (banMember === message.member) return message.channel.send("**You Cannot Ban Yourself**")
 
         var reason = args.slice(1).join(" ");
-
+        if (!banMember.bannable) return message.channel.send("Cant Kick That User")
         if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("I dont have permission to perform this command")
 
         let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")

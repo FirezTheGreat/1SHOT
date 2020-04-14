@@ -34,7 +34,7 @@ module.exports = {
         };
         const sembed = new MessageEmbed()
             .setColor("GREEN")
-            .setDescription("**Translator Activated, Put Some Text To Get The Translated results!**")
+            .setDescription("**Translator Activated, Put Some Text In The Next Line To Get The Translated results!**")
         await message.channel.send(sembed)
 
         try {
