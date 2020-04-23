@@ -20,6 +20,9 @@ module.exports = {
         const { channel } = message.member.voice;
         if (!channel) return message.channel.send("You are not in a voice channel!");
 
+        const triviaData = ops.queue2.get(message.guild.id)
+        if (triviaData.isTriviaRunning == true) return message.channel.send("**Cannot Play Music While Playing Music Trivia!**")
+        
         const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) {
             return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');

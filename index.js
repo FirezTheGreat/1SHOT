@@ -1,8 +1,11 @@
 const { Client, MessageAttachment, Collection, MessageEmbed } = require('discord.js');
-const { TOKEN } = require('./config');
+const { PREFIX, TOKEN, DBL_API_KEY } = require('./config');
 const bot = new Client({ disableEveryone: true });
+const DBL = require('dblapi.js');
+const dbl = new DBL(DBL_API_KEY)
 const fs = require("fs");
 const db = require('quick.db');
+const jimp = require('jimp');
 
 bot.commands = new Collection();
 bot.aliases = new Collection();
@@ -14,54 +17,84 @@ bot.categories = fs.readdirSync("./commands/");
 
 ["command"].forEach(handler => {
     require(`./handler/${handler}`)(bot);
-})
-
-bot.on('guildMemberAdd', function (member) {
-
-    const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
-    if (!channel) return;
-
-    channel.send(`Welcome to our ${member}, please read the rules in the rules channel`);
-
-    var r = member.guild.roles.cache.find(r => r.name === 'Community');
-    member.roles.add(r)
+});
+bot.on('ready', () => {
+    setInterval(() => {
+        dbl.postStats(bot.guilds.cache.size);
+    }, 1800000);
 });
 
-bot.on('message', message => {
-
-    if (message.content.toLowerCase() === 'noob') {
-        const attachment = new MessageAttachment('https://pics.me.me/thumb_no-u-no-u-43349136.png');
-        message.channel.send(attachment);
+bot.on('message', async message => {
+    let prefix;
+    if (message.guild) {
+        try {
+            let fetched = await db.fetch(`prefix_${message.guild.id}`);
+            if (fetched == null) {
+                prefix = PREFIX
+            } else {
+                prefix = fetched
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
-    if (message.content === "Hello") {
-        message.channel.send('Hi There!');
-    }
-    if (message.channel.type != "text") return undefined;
-    db.add(`messages_${message.guild.id}_${message.author.id}`, 1)
-    let messagefetch = db.fetch(`messages_${message.guild.id}_${message.author.id}`)
+});
 
-    let messages;
-    if (messagefetch == 25) messages = 25; //Level 1
-    else if (messagefetch == 65) messages = 65; // Level 2
-    else if (messagefetch == 115) messages = 115; // Level 3
-    else if (messagefetch == 200) messages = 200; // Level 4
-    else if (messagefetch == 300) messages = 300; // Level 5
-    else if (messagefetch == 410) messages = 410; // Level 6
-    else if (messagefetch == 510) messages = 510; // Level 7
-    else if (messagefetch == 720) messages = 720; // Level 8
-    else if (messagefetch == 870) messages = 870; // Level 9
-    else if (messagefetch == 1000) messages = 1000; // Level 10
+bot.on('guildMemberAdd', async member => {
 
+    let wChan = db.fetch(`welcome_${member.guild.id}`)
 
-    if (!isNaN(messages)) {
-        db.add(`level_${message.guild.id}_${message.author.id}`, 1)
-        let levelfetch = db.fetch(`level_${message.guild.id}_${message.author.id}`)
+    if (wChan == null) return;
 
-        let levelembed = new MessageEmbed()
-            .setColor("GREEN")
-            .setDescription(`${message.author}, You have leveled up to level ${levelfetch}`)
-        message.channel.send(levelembed)
-    }
+    if (!wChan) return;
+
+    let font64 = await jimp.loadFont(jimp.FONT_SANS_64_WHITE)
+    let bfont64 = await jimp.loadFont(jimp.FONT_SANS_64_BLACK)
+    let mask = await jimp.read('https://i.imgur.com/552kzaW.png')
+    let welcome = await jimp.read('https://t.wallpaperweb.org/wallpaper/nature/1920x1080/greenroad1920x1080wallpaper3774.jpg')
+
+    jimp.read(member.user.displayAvatarURL({ format: 'png' })).then(avatar => {
+        avatar.resize(200, 200)
+        mask.resize(200, 200)
+        avatar.mask(mask)
+        welcome.resize(1000, 300)
+
+        welcome.print(font64, 265, 55, `Welcome ${member.user.username}`)
+        welcome.print(bfont64, 265, 125, `To ${member.guild.name}`)
+        welcome.print(font64, 265, 195, `There are now ${member.guild.memberCount} users`)
+        welcome.composite(avatar, 40, 55).write('Welcome2.png')
+        try {
+            member.guild.channels.cache.get(wChan).send(``, { files: ["Welcome2.png"] })
+        } catch (e) {
+            return;
+        }
+    })
+        var r = member.guild.roles.cache.find(r => r.name === 'Community');
+        if (!r) return;
+        member.roles.add(r)
+
+});
+
+const express = require("express");
+const app = express();
+
+const dreams = [
+  "Find and count some sheep",
+  "Climb a really tall mountain",
+  "Wash the dishes"
+];
+app.use(express.static("public"));
+
+app.get("/", (request, response) => {
+  response.sendFile(__dirname + "/views/index.html");
+});
+
+app.get("/dreams", (request, response) => {
+  response.json(dreams);
+});
+
+const listener = app.listen(process.env.PORT, () => {
+  console.log("Your app is listening on port " + listener.address().port);
 });
 
 bot.login(TOKEN);

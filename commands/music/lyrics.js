@@ -45,7 +45,7 @@ module.exports = {
       const song = result.response.song;
 
       let lyrics = await getLyrics(song.url);
-      lyrics = lyrics.replace(/lyrics|lyric|lyrical|official music video|\(official music video\)|audio|official|official video|official video hd|official hd video|offical video music|\(offical video music\)|extended|hd|(\[.+\])/gi, "");
+      lyrics = lyrics.replace(/lyrics|lyric|lyrical|official music video|\(official music video\)|audio|official|official video|official video hd|official hd video|offical video music|\(offical video music\)|extended|hd|(\[.+\])/gi, " ");
       if (lyrics.length > 8192) {
         return sentMessage.edit("Not Availble.");
       } if (lyrics.length < 2048) {

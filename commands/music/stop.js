@@ -1,7 +1,7 @@
 module.exports = {
     config: {
         name: 'stop',
-        aliases: ['leave'],
+        aliases: ['leave', 'dc'],
         category: "music",
         description: "stops the music playing",
         usage: ', leave',

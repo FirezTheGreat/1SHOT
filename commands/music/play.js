@@ -14,6 +14,7 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
+        if(!args[0]) return;
 
         args = message.content.split(' ');
         const searchString = args.slice(1).join(' ');
@@ -22,6 +23,9 @@ module.exports = {
         const { channel } = message.member.voice;
         if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
 
+        const triviaData = ops.queue2.get(message.guild.id)
+        if (triviaData.isTriviaRunning == true) return message.channel.send("**Cannot Play Music While Playing Music Trivia!**")
+        
         const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');
         if (!permissions.has('SPEAK')) return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
@@ -105,7 +109,7 @@ module.exports = {
                     return;
                 }
 
-                const dispatcher = queue.connection.play(ytdl(song.url, { filter: "audioonly", highWaterMark: 1 << 20, quality: "highestaudio" }))
+                const dispatcher = queue.connection.play(ytdl(song.url, { highWaterMark: 1 << 20, quality: "highestaudio" }))
                     .on('finish', () => {
                         if (queue.loop) {
                             queue.songs.push(queue.songs.shift());

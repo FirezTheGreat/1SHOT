@@ -12,18 +12,21 @@ module.exports = {
         noalias: "No Aliases"
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("**You Dont Have Permmissions To Mute Someone!**");
+        if (!message.member.hasPermission("MANAGE_GUILD")) return message.channel.send("**You Dont Have Permmissions To Mute Someone!**");
 
-        if (!message.guild.me.hasPermission(["ADMINISTRATOR"])) return message.channel.send("**I Don't Have Permissions To Mute Someone!**")
+        if (!message.guild.me.hasPermission("MANAGE_GUILD")) return message.channel.send("**I Don't Have Permissions To Mute Someone!**")
 
-        let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let mutee = message.mentions.members.first() || message.guild.members.cache.get(args[0])
         if (!mutee) return message.channel.send("**Please Enter A User To Be Muted!**");
+        if (mutee === message.member) return message.channel.send("**You Cannot Mute Yourself!**")
+        if (mutee.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) return message.channel.send('**Cannot Mute This User!**')
         let reason = args.slice(1).join(" ");
+        if (mutee.user.bot) return message.channel.send("**Cannot Mute Bots!**");
         const userRoles = mutee.roles.cache
             .filter(r => r.id !== message.guild.id)
             .map(r => r.id)
         let muterole = message.guild.roles.cache.find(r => r.name === "muted")
-        if(mutee.roles.cache.has(muterole.id)) return message.channel.send("User is Already Muted!")
+        if (mutee.roles.cache.has(muterole.id)) return message.channel.send("User is Already Muted!")
         if (!muterole) {
             try {
                 muterole = await message.guild.roles.create({
@@ -47,6 +50,7 @@ module.exports = {
                 console.log(e);
             }
         };
+        
         db.set(`muteeid_${message.guild.id}_${mutee.id}`, userRoles)
         mutee.roles.set([muterole.id]).then(() => {
             mutee.send(`Hello, you have been muted in ${message.guild.name} for ${reason || "No Reason"}`).catch(err => console.log(err))
@@ -56,23 +60,12 @@ module.exports = {
                 .setDescription(`${mutee.user.username} was successfully muted.`)
             message.channel.send(sembed);
         })
-
-        let createChannel = message.guild.channels.cache.find(r => r.name === "modlogs")
-        if (!createChannel) {
-            createChannel = await message.guild.channels.create('modlogs', {
-                type: 'text',
-                permissionOverwrites: [
-                    {
-                        id: message.guild.id,
-                        deny: ['VIEW_CHANNEL']
-                    }
-                ]
-            })
-        }
-
+        let channel = db.fetch(`modlog_${message.guild.id}`)
+        if (!channel) return;
+     
         let embed = new MessageEmbed()
             .setColor(redlight)
-            .setThumbnail(mutee.user.displayAvatarURL())
+            .setThumbnail(mutee.user.displayAvatarURL({ dynamic: true }))
             .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL())
             .addField("Moderation:", "mute")
             .addField("Mutee:", mutee.user.username)
@@ -80,8 +73,10 @@ module.exports = {
             .addField("Reason:", reason || "No Reason")
             .addField("Date:", message.createdAt.toLocaleString())
             .setFooter(message.member.displayName, message.author.displayAvatarURL())
+            .setTimestamp()
 
-        let sChannel = message.guild.channels.cache.find(c => c.name === "modlogs")
+        var sChannel = message.guild.channels.cache.get(channel)
+        if (!sChannel) return;
         sChannel.send(embed)
     }
 }

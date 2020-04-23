@@ -15,6 +15,8 @@ module.exports = {
 
         let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
+        if (!args[0]) return message.channel.send("Mention A User!")
+      
         if (isNaN(args[1])) return;
         db.subtract(`money_${message.guild.id}_${user.id}`, args[1])
         let bal = await db.fetch(`money_${message.guild.id}_${user.id}`)

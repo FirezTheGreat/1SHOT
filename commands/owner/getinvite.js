@@ -38,7 +38,7 @@ module.exports = {
             });
             message.channel.send(invite.url);
         } else {
-            return message.channel.send(`No Server Found ${args[0]}`);
+            return message.channel.send(`\`${args.join(' ')}\` - Bot is Not in this server`);
         }
     } else {
         return message.channel.send("You Are Not The Owner!")
