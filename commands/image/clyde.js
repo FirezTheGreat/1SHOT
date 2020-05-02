@@ -26,7 +26,7 @@ module.exports = {
             message.channel.send(attachment);
             m.delete({ timeout: 5000 });
         } catch (e) {
-            m.edit(message.language.get("ERR_OCCURENCED"));
+            m.edit(e.message);
         }
     }
 }

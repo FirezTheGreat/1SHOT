@@ -8,8 +8,10 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
+        if (!args[0]) return message.channel.send("**Please Enter A Song Number!**")
+
         const { channel } = message.member.voice;
-        if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to skip to a particular song!');
+        if (!channel) return message.channel.send('**I\'m Sorry But You Need To Be In A Voice Channel To Skip To A Particular Song!**');
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
 
@@ -18,7 +20,7 @@ module.exports = {
           }
 
         if (args[0] < 1 && args[0] >= serverQueue.songs.length) {
-            return message.channel.send('Please enter a valid song number');
+            return message.channel.send('**Please Enter A Valid Song Number!**');
         }
 
         serverQueue.songs.splice(0, args[0] - 2);

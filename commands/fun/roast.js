@@ -7,12 +7,12 @@ module.exports = {
         category: "fun",
         noalias: [''],
         description: "Roasts people",
-        usage: "[ mention | id ]",
+        usage: "[username | nickname | mention | ID]",
         accesableby: "everyone"
     },
     run: async (bot, message, args) => {
 
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' '));
 
         let roast = roasts.roast[Math.floor((Math.random() * roasts.roast.length))];
 
@@ -28,8 +28,9 @@ module.exports = {
         else if (args[0]) {
             const embed = new MessageEmbed()
                 .setAuthor(message.guild.name, message.guild.iconURL())
+                .setTitle(`${message.author.username}-`)
                 .setColor("GREEN")
-                .setDescription(`${roast} - ${message.author}`)
+                .setDescription(`${roast}`)
                 .setFooter(member.displayName, member.user.displayAvatarURL())
                 .setTimestamp()
             message.channel.send(embed);

@@ -7,11 +7,11 @@ module.exports = {
         aliases: ['motivate', 'motivational'],
         description: 'Get a random motivation quote',
         category: "fun",
-        usage: "[mention](optional)",
+        usage: "[username | nickname | mention | ID](optional)",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member;
 
         const randomQuote = jsonQuotes.quotes[Math.floor((Math.random() * jsonQuotes.quotes.length))];
         if (!args[0]) {
@@ -29,7 +29,7 @@ module.exports = {
                 .setAuthor(message.guild.name, message.guild.iconURL())
                 .setColor("GREEN")
                 .setTitle(`${randomQuote.author} -`)
-                .setDescription(`**${randomQuote.text}** \n\nBy ${message.author.username} to ${member.displayName}`)
+                .setDescription(`**${randomQuote.text}** \n\nBy ${message.member.displayName} to ${member.displayName}`)
                 .setFooter(member.displayName, member.user.displayAvatarURL())
                 .setTimestamp()
             message.channel.send(embed)

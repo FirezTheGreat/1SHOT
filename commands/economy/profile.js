@@ -7,12 +7,13 @@ module.exports = {
         noalias: [""],
         category: "economy",
         description: "Shows profile of the user",
-        usage: "[mention | ID](optional)",
+        usage: "[username | nickname | mention | ID](optional)",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
 
-        let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+        let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args.join(" ").toLocaleLowerCase()) || message.guild.members.cache.find(r => r.displayName.toLowerCase() === args.join(" ").toLocaleLowerCase()) || message.member;
+        if (!user) return message.channel.send("**Enter A Valid User!**")
 
         let money = await db.fetch(`money_${message.guild.id}_${user.id}`)
         if (money === null) money = 0;
@@ -35,7 +36,7 @@ module.exports = {
 
         let moneyEmbed = new MessageEmbed()
             .setColor("GREEN")
-            .setDescription(`**${user.displayName}'s Profile**\n\nPocket: ${money}\nBank: ${bank}\nVIP Rank: ${vip}\n\n**Inventory**\n\nNikes: ${shoes}\nCars: ${newcar}\nMansion: ${newhouse}`);
+            .setDescription(`**${user.displayName}'s Profile**\n\nPocket - ${money}\nBank - ${bank}\nVIP Rank - ${vip}\n\n**Inventory**\n\nNikes - ${shoes}\nCars - ${newcar}\nMansion - ${newhouse}`);
         message.channel.send(moneyEmbed)
     }
 }

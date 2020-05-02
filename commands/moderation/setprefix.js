@@ -10,7 +10,7 @@ module.exports = {
         accessableby: 'Administrators'
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send("**You Do Not Have Sufficient Permissions! - ADMINISTRATOR**")
+        if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send("**You Do Not Have Sufficient Permissions! - [ADMINISTRATOR]**")
 
         if (!args[0]) return message.channel.send("**Please Enter A Prefix!**")
         try {

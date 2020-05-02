@@ -14,7 +14,7 @@ module.exports = {
             return message.channel.send("**You Have To Be In The Same Channel With The Bot!**");
           }
         const serverQueue = ops.queue.get(message.guild.id);
-        if (!serverQueue) return message.channel.send('There is nothing playing that I could stop for you.');
+        if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end()
         return message.channel.send('👋 **Disconnected**')

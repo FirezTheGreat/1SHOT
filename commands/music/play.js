@@ -14,8 +14,7 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
-        if(!args[0]) return;
-
+        if (!args[0]) return message.channel.send("**Please Enter Song Name Or Link!**")
         args = message.content.split(' ');
         const searchString = args.slice(1).join(' ');
         const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
@@ -23,9 +22,6 @@ module.exports = {
         const { channel } = message.member.voice;
         if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
 
-        const triviaData = ops.queue2.get(message.guild.id)
-        if (triviaData.isTriviaRunning == true) return message.channel.send("**Cannot Play Music While Playing Music Trivia!**")
-        
         const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');
         if (!permissions.has('SPEAK')) return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
@@ -53,14 +49,16 @@ module.exports = {
             }
             return handleVideo(video, message, channel);
 
-
             async function handleVideo(video, message, channel, playlist = false) {
                 const serverQueue = ops.queue.get(message.guild.id);
+                const songInfo = await ytdl.getInfo(video.id);
                 const song = {
                     id: video.id,
                     title: Util.escapeMarkdown(video.title),
                     url: `https://www.youtube.com/watch?v=${video.id}`,
-                    thumbnail: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`
+                    thumbnail: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`,
+                    duration: video.duration,
+                    time: songInfo.length_seconds
                 };
 
                 if (serverQueue) {
@@ -84,9 +82,9 @@ module.exports = {
                     voiceChannel: channel,
                     connection: null,
                     songs: [],
-                    volume: 2,
+                    volume: 3,
                     playing: true,
-                    loop: false
+                    loop: false,
                 };
                 ops.queue.set(message.guild.id, queueConstruct);
                 queueConstruct.songs.push(song);
@@ -100,14 +98,18 @@ module.exports = {
                     await channel.leave();
                     return message.channel.send(`I could not join the voice channel: ${error.message}`);
                 }
-            }
+            };
             async function play(song) {
                 const queue = ops.queue.get(message.guild.id);
                 if (!song) {
                     queue.voiceChannel.leave();
                     ops.queue.delete(message.guild.id);
                     return;
-                }
+                };
+
+                let npmin = Math.floor(song.time / 60);
+                let npsec = song.time - npmin * 60
+                let np = `${npmin}:${npsec}`.split(' ')
 
                 const dispatcher = queue.connection.play(ytdl(song.url, { highWaterMark: 1 << 20, quality: "highestaudio" }))
                     .on('finish', () => {
@@ -125,7 +127,7 @@ module.exports = {
                     .setTitle('Now Playing\n')
                     .setThumbnail(song.thumbnail)
                     .setTimestamp()
-                    .setDescription(`🎵 Now playing:\n **${song.title}** 🎵`)
+                    .setDescription(`🎵 Now playing:\n **${song.title}** 🎵\n\n Song Length: **${np}**`)
                     .setFooter(message.member.displayName, message.author.displayAvatarURL());
                 queue.textChannel.send(embed);
             };

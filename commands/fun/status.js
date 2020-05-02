@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+
 module.exports = {
     config: {
         name: "status",
@@ -60,6 +61,8 @@ module.exports = {
                 let trackName = activity.details;
                 let trackAuthor = activity.state;
                 let trackAlbum = activity.assets.largeText;
+
+                trackAuthor = trackAuthor.replace(/;/g, ",")
 
                 const embed = new MessageEmbed()
                     .setAuthor('Spotify Track Info', 'https://cdn.discordapp.com/emojis/408668371039682560.png')

@@ -111,7 +111,7 @@ module.exports = {
 
         });
     } else {
-        return message.channel.send("NO")
+        return;
     }
     }
 

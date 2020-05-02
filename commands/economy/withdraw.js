@@ -10,14 +10,16 @@ module.exports = {
         usage: "<amount>"
     },
     run: async (bot, message, args) => {
-
         let user = message.author;
 
         let member2 = db.fetch(`bank_${message.guild.id}_${user.id}`)
 
-        if (args[0] == 'all') {
+        if (args.join(' ').toLocaleLowerCase() == 'all') {
             let money = await db.fetch(`bank_${message.guild.id}_${user.id}`)
-
+            let embed = new MessageEmbed()
+              .setColor("GREEN")
+              .setDescription(`❌**You Do Not Have Any Money To Withdraw!**`)
+            if (money === 0) return message.channel.send(embed)
             db.subtract(`bank_${message.guild.id}_${user.id}`, money)
             db.add(`money_${message.guild.id}_${user.id}`, money)
             let embed5 = new MessageEmbed()

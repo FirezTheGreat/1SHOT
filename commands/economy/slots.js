@@ -7,7 +7,7 @@ module.exports = {
         name:"slots",
         aliases: ["sl"],
         category: "economy",
-        description: "Slot game. | 9x - rare | 3x - common",
+        description: "Slot game | 9x - rare | 3x - common",
         usage: "<amount>",
         accessableby: "everyone"
     },
@@ -30,7 +30,7 @@ module.exports = {
     if (money > moneydb) return message.channel.send(moneymore);
 
     let number = []
-    for (i = 0; i < 3; i++) { number[i] = Math.floor(Math.random() * slotItems.length); }
+    for (let i = 0; i < 3; i++) { number[i] = Math.floor(Math.random() * slotItems.length); }
 
     if (number[0] == number[1] && number[1] == number[2])  { 
         money *= 9

@@ -41,7 +41,7 @@ module.exports = {
             return message.channel.send(`\`${args.join(' ')}\` - Bot is Not in this server`);
         }
     } else {
-        return message.channel.send("You Are Not The Owner!")
+        return;
     }
     }
 

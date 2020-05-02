@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const db = require("quick.db");
-const PREFIX = "."
+const { PREFIX } = require('../../config');
 
 module.exports = {
     config: {
@@ -12,7 +12,15 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
+        let prefix;
+        let fetched = await db.fetch(`prefix_${message.guild.id}`);
 
+        if (fetched === null) {
+            prefix = PREFIX
+        } else {
+            prefix = fetched
+        }
+      
         let user = message.author;
 
         function isOdd(num) {
@@ -28,7 +36,7 @@ module.exports = {
 
         let moneyhelp = new MessageEmbed()
             .setColor("GREEN")
-            .setDescription(`❌ Specify an amount to gamble | ${PREFIX}roulette <color> <amount>`);
+            .setDescription(`❌ Specify an amount to gamble | ${prefix}roulette <color> <amount>`);
 
         let moneymore = new MessageEmbed()
             .setColor("GREEN")
@@ -37,7 +45,6 @@ module.exports = {
         let colorbad = new MessageEmbed()
             .setColor("GREEN")
             .setDescription(`❌ Specify a color | Red [1.5x] (normal) Black [2x] (hard) Green [15x](rare)`);
-
 
         if (!colour) return message.channel.send(colorbad);
         colour = colour.toLowerCase()

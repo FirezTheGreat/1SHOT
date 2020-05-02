@@ -14,15 +14,14 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
+        if (!args[0]) return message.channel.send("**Please Enter A Song Name!**")
         const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
         const searchString = args.slice(1).join(' ');
 
         const { channel } = message.member.voice;
-        if (!channel) return message.channel.send("You are not in a voice channel!");
+        if (!channel) return message.channel.send("**You Are Not In A Voice Channel!**");
 
-        const triviaData = ops.queue2.get(message.guild.id)
-        if (triviaData.isTriviaRunning == true) return message.channel.send("**Cannot Play Music While Playing Music Trivia!**")
-        
+
         const permissions = channel.permissionsFor(message.client.user);
         if (!permissions.has('CONNECT')) {
             return message.channel.send('I cannot connect to your voice channel, make sure I have the proper permissions!');
@@ -93,7 +92,7 @@ module.exports = {
                     voiceChannel: channel,
                     connection: null,
                     songs: [],
-                    volume: 2,
+                    volume: 3,
                     playing: true,
                     loop: false
                 };

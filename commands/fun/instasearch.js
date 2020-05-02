@@ -7,7 +7,7 @@ module.exports = {
         aliases: ["searchinsta", "sinsta"],
         category: "fun",
         description: "Find out some nice instagram statistics",
-        usage: "<name>",
+        usage: "[instagram username]",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {

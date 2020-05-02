@@ -8,19 +8,20 @@ module.exports = {
     noalias: [""],
     category: "economy",
     description: "Robs someone",
-    usage: "[mention]",
+    usage: "[username | nickname | mention | ID]",
     accessableby: "everyone"
   },
   run: async (bot, message, args) => {
-    let user = message.mentions.members.first();
+    if (!args[0]) return message.channel.send("**Enter A Name!**")  
 
-    if (!args[0]) return message.channel.send("who")
+    let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.guild.members.cache.find(r => r.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase());
+    if (!user) return message.channel.send("**Enter A Valid User!**")
 
     let embed2 = new MessageEmbed()
       .setColor("GREEN")
       .setDescription(`❌ You cannot rob yourself`)
 
-    if (message.mentions.users.first().id === message.author.id) {
+    if (user.user.id === message.author.id) {
       return message.channel.send(embed2)
     }
 
@@ -58,13 +59,13 @@ module.exports = {
       } else {
 
         let embed = new MessageEmbed()
-          .setDescription(`✅ You robbed ${user} and got away with ${random} coins`)
+          .setDescription(`✅ You robbed ${user.user.username} and got away with ${random} coins`)
           .setColor("GREEN")
         message.channel.send(embed)
 
-        db.subtract(`money_${message.guild.id}_${user.id}`, random)
+        db.subtract(`money_${message.guild.id}_${user.user.id}`, random)
         db.add(`money_${message.guild.id}_${message.author.id}`, random)
-        db.set(`rob_${message.guild.id}_${user.id}`, Date.now())
+        db.set(`rob_${message.guild.id}_${user.user.id}`, Date.now())
 
       }
     };

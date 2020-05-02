@@ -7,14 +7,14 @@ module.exports = {
         category: "info",
         aliases: ["who", "user", "userinfo"],
         description: "Returns user information",
-        usage: "[id | mention]",
+        usage: "[name | nickname | mention | ID] (optional)",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member; 
-
+        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) ||  message.member; 
+      
         if(!member)
-          return undefined;
+        return message.channel.send("**Enter A Valid User!**");
       
         const joined = formatDate(member.joinedAt);
         const roles = member.roles.cache

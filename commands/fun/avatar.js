@@ -4,12 +4,12 @@ module.exports = {
     aliases: ["av"],
     category: "fun",
     description: "Shows Avatar",
-    usage: "[mention | id]",
+    usage: "[username | nickname | mention | ID](optional)",
     accessableby: "everyone"
   },
   run: async (bot, message, args) => { 
     
-    let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+    let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member;
 
     if (args[0]) {
       message.channel.send({

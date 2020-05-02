@@ -11,10 +11,11 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        if(!args[0]) return message.channel.send('**Please enter a city name**')
+        if(!args[0]) return message.channel.send('**Please Enter A City Name!**')
+      
         weather.find({search: args.join(" "), degreeType: 'C'}, function(err, result){
         
-        if(err) message.channel.send(err);
+        if(err) message.channel.send(err.message);
 
         if(result.length === 0) {
             message.channel.send('**Please Enter A Valid Location.**')
@@ -29,14 +30,14 @@ module.exports = {
                 .setAuthor(`Weather for ${current.observationpoint}`)
                 .setThumbnail(current.imageUrl)
                 .setColor("GREEN")
-                .addField('Timezone', `UTC ${location.timezone}`, true)
-                .addField('Degree Type', `${location.degreetype}`, true)
-                .addField('Temperature', `${current.temperature} Degrees`, true)
-                .addField('Feels Like', `${current.feelslike} Degrees`, true)
-                .addField('Winds', `${current.winddisplay}`, true)
-                .addField('Humidity', `${current.humidity}%`, true)
-                .addField('Date', `${current.date}`, true)
-                .addField('Day', `${current.day}`, true)
+                .addField('**Timezone**', `UTC ${location.timezone}`, true)
+                .addField('**Degree Type**', `${location.degreetype}`, true)
+                .addField('**Temperature**', `${current.temperature} Degrees`, true)
+                .addField('**Feels Like**', `${current.feelslike} Degrees`, true)
+                .addField('**Winds**', `${current.winddisplay}`, true)
+                .addField('**Humidity**', `${current.humidity}%`, true)
+                .addField('**Date**', `${current.date}`, true)
+                .addField('**Day**', `${current.day}`, true)
                 .setFooter(message.member.displayName, message.author.displayAvatarURL())
                 .setTimestamp()
 

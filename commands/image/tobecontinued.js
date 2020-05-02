@@ -9,12 +9,12 @@ module.exports = {
         aliases: ['tbc'],
         category: "image",
         description: "Shows A ToBeContinued Image",
-        usage: "[mention](optional)",
+        usage: "[username | nickname | mention | ID] (optional)",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
 
-        let user = await message.mentions.members.first() || message.member;
+        let user = await message.mentions.members.first() || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member;
         let m = await message.channel.send("**Please Wait...**");
         let buffer = await AmeAPI.generate("tobecontinued", { url: user.user.displayAvatarURL({ format: "png", size: 512 }) });
         let attachment = new Discord.MessageAttachment(buffer, "tobecontinued.png");

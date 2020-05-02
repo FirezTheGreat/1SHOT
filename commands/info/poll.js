@@ -10,18 +10,16 @@ module.exports = {
         accessableby: "Administrator",
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission('ADMINISTRATOR'))
-            return undefined;
+        if (!message.member.hasPermission('MANAGE_GUILD')) return message.channel.send("**You Do Not Have Sufficient Permissions! - [MANAGE_GUILD]**");
 
         if (!args[0])
-            return undefined;
+            return message.channel.send("**Please Enter A Query!**");
 
         const embed = new MessageEmbed()
             .setColor("GREEN")
-            .setTitle(`Poll for 1SHOT Sever`)
+            .setTitle(`Poll For ${message.guild.name} Sever`)
             .setFooter(message.member.displayName, message.author.displayAvatarURL())
             .setDescription(args.join(' '))
-            .setTitle(`Poll by ${message.author.username}`);
         var msg = await message.channel.send(embed);
 
         await msg.react('✅');

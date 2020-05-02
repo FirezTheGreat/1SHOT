@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const db = require('quick.db');
-const PREFIX = "."
+const { PREFIX } = require('../../config')
 
 module.exports = {
     config: {
@@ -12,18 +12,24 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        if (!message.content.startsWith('.')) return;
+        let prefix;
+        let fetched = await db.fetch(`prefix_${message.guild.id}`);
 
+        if (fetched === null) {
+            prefix = PREFIX
+        } else {
+            prefix = fetched
+        }
         let user = message.author;
 
-        if (args[0] == 'nikes') {
+        if (args.join(' ').toLocaleLowerCase() == 'nikes') {
             let embed1 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`❌ You don't have Nikes to sell`);
 
-            let nikeses = await db.fetch(`nikes_${message.guild.id}_${user.id}`)
+            let nikees = await db.fetch(`nikes_${message.guild.id}_${user.id}`)
 
-            if (nikeses < 1) return message.channel.send(embed1)
+            if (nikees < 1) return message.channel.send(embed1)
 
             db.fetch(`nikes_${message.guild.id}_${user.id}`)
             db.subtract(`nikes_${message.guild.id}_${user.id}`, 1)
@@ -34,7 +40,7 @@ module.exports = {
 
             db.add(`money_${message.guild.id}_${user.id}`, 600)
             message.channel.send(embed2)
-        } else if (args[0] == 'car') {
+        } else if (args.join(' ').toLocaleLowerCase() == 'car') {
             let embed3 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`❌ You don't have a Car to sell`);
@@ -52,7 +58,7 @@ module.exports = {
 
             db.add(`money_${message.guild.id}_${user.id}`, 800)
             message.channel.send(embed4)
-        } else if (args[0] == 'mansion') {
+        } else if (args.join(' ').toLocaleLowerCase() == 'mansion') {
             let sembed2 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`❌ You don't have a Mansion to sell`);
@@ -71,11 +77,13 @@ module.exports = {
             db.add(`money_${message.guild.id}_${user.id}`, 1200)
             message.channel.send(sembed3)
         } else {
-            if (message.content.toLowerCase() === `${PREFIX}sell`) {
+            if (message.content.toLowerCase() === `${prefix}sell`) {
                 let embed9 = new MessageEmbed()
                     .setColor("GREEN")
-                    .setDescription(`❌ Enter an item to sell. Type ${PREFIX}store to see list of items`)
+                    .setDescription(`❌ Enter an item to sell. Type ${prefix}store to see list of items`)
                 return message.channel.send(embed9)
+            } else {
+              return message.channel.send("**Not A Valid Item!**")
             }
         }
     }

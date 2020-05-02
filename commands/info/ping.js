@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     config: {
         name: "ping",
-        description: "PONG! Displays the api & bot latency",
+        description: "Displays User And Bot Latency",
         usage: " ",
         noalias: "No Aliases",
         category: "info",

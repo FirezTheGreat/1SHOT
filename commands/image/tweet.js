@@ -7,7 +7,7 @@ module.exports = {
         noalias: [''],
         category: "image",
         description : "Sends A Tweet",
-        usage: "[user] <text>",
+        usage: "[username] <text>",
         accessableby: "everyone"
     },
     run: async(bot, message, args) => {
@@ -18,7 +18,7 @@ module.exports = {
         let m = await message.channel.send("**Please wait...**");
 
         if(!user){
-            return m.edit("**You have to enter someone's twitter nickname!**");
+            return m.edit("**You Have To Enter Someone's Twitter Nickname!**");
         }
 
         if(!text){

@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
-const prefix = '.';
 const musictriviajson = require('../../JSON/musictrivia.json')
+const db = require('quick.db');
 
 module.exports = {
     config: {
@@ -13,12 +13,15 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
+        const prefix = await db.fetch(`prefix_${message.guild.id}`)
+
         const noperm = new MessageEmbed()
             .setColor("GREEN")
             .setDescription("**❌ You do not have permissions to add money!**")
         if (!message.member.hasPermission("CONNECT", "SPEAK")) return message.channel.send(noperm)
 
         const serverQueue = ops.queue.get(message.guild.id)
+        if (serverQueue) return message.channel.send("Cannot Play Music Trivia While Music is Playing!")
         const triviaData = {
             isTriviaRunning: false,
             wasTriviaEndCalled: false,
@@ -92,7 +95,7 @@ module.exports = {
                     .play(
                         ytdl(queue[0].url, {
                             quality: 'highestaudio',
-                            highWaterMark: 1 << 25
+                            highWaterMark: 1 << 20
                         })
                     )
                     .on('start', function() {
@@ -178,7 +181,6 @@ module.exports = {
                                 m.react('✅');
                                 return collector.stop();
                             } else {
-                                // wrong answer
                                 return m.react('❌');
                             }
                         });

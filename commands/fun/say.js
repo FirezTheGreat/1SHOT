@@ -13,7 +13,7 @@ module.exports = {
     run: (bot, message, args) => {
 
         if (args.length === 0)
-            return message.channel.send("No")
+            return message.channel.send("**Enter Some Text!**")
         message.delete({ timeout: 1000 })
 
         const embed = new MessageEmbed()

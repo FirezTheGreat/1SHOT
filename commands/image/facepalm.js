@@ -7,11 +7,11 @@ module.exports = {
         aliases: ['fp'],
         category: 'image',
         description: "Shows Facepalmed User",
-        usage: "[mention](optional)",
+        usage: "[username | nickname | mention | ID] (optional)",
         accessableby: "everyones"
     },
     run: async (bot, message, args) => {
-        let user = await message.mentions.members.first() || message.member,
+        let user = await message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member,
         m = await message.channel.send("**Please Wait...**"),
         canvas = Canvas.createCanvas(632, 357),
         ctx = canvas.getContext("2d");

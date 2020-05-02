@@ -40,7 +40,7 @@ module.exports = {
 
             if (!args[0]) {
                 return message.channel.send(embed2)
-                    .catch(err => console.log(err))
+                    .catch(err => message.channel.send(err.message))
             }
             let embed6 = new MessageEmbed()
                 .setColor("GREEN")

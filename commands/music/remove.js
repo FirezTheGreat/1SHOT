@@ -8,6 +8,8 @@ module.exports = {
         acessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
+        if (!args[0]) return message.channel.send("**Please Enter A Song Number!**")
+
         const { channel } = message.member.voice;
         if (!channel) return message.channel.send('I\'m sorry but you need to be in a voice channel to remove a particular song number!');
         if (message.guild.me.voice.channel !== message.member.voice.channel) {
@@ -17,7 +19,7 @@ module.exports = {
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
 
         if (args[0] < 1 && args[0] >= serverQueue.songs.length) {
-            return message.channel.send('Please enter a valid song number');
+            return message.channel.send('**Please Enter A Valid Song Number!**');
         }
         serverQueue.songs.splice(args[0] - 1, 1);
         return message.channel.send(`Removed song number ${args[0]} from queue`);

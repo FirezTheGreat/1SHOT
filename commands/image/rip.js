@@ -9,12 +9,12 @@ module.exports = {
         noalias: [''],
         category: 'image',
         description: "Shows Grave Of An User!",
-        usage: "[mention](optional)",
+        usage: "[username | nickname | mention | ID] (optional)",
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
 
-        let user = await message.mentions.members.first() || message.member;
+        let user = await message.mentions.members.first() || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member;
         let m = await message.channel.send("**Please Wait...**");
         let buffer = await AmeAPI.generate("rip", { url: user.user.displayAvatarURL({ format: "png", size: 512 }) });
         let attachment = new Discord.MessageAttachment(buffer, "rip.png");

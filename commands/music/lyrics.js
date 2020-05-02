@@ -22,6 +22,7 @@ module.exports = {
     if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
 
     let songName = serverQueue.songs[0].title
+      songName = songName.replace(/lyrics|lyric|lyrical|official music video|\(official music video\)|audio|official|official video|official video hd|official hd video|offical video music|\(offical video music\)|extended|hd|(\[.+\])/gi, "");
 
     const sentMessage = await message.channel.send(
       '👀 Searching for lyrics 👀'
@@ -45,9 +46,9 @@ module.exports = {
       const song = result.response.song;
 
       let lyrics = await getLyrics(song.url);
-      lyrics = lyrics.replace(/lyrics|lyric|lyrical|official music video|\(official music video\)|audio|official|official video|official video hd|official hd video|offical video music|\(offical video music\)|extended|hd|(\[.+\])/gi, " ");
+      lyrics = lyrics.replace(/(\[.+\])/g, '');
       if (lyrics.length > 8192) {
-        return sentMessage.edit("Not Availble.");
+        return sentMessage.edit("**Not Availble**");
       } if (lyrics.length < 2048) {
         const lyricsEmbed = new MessageEmbed()
           .setColor('GREEN')
@@ -95,8 +96,9 @@ module.exports = {
         message.channel.send(fourthLyricsEmbed);
       }
     } catch (e) {
+      console.log(e)
       return sentMessage.edit(
-        'Not Available.'
+        '**Not Available**'
       );
     }
 

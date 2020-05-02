@@ -8,17 +8,17 @@ module.exports = {
         accessableby: "Administrator"
     },
     run: async (bot, message, args) => {
-        if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("You Don't Have Sufficient Permissions!")
+        if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("You Don't Have Sufficient Permissions!- [MANAGE_MESSAGES]")
         if (isNaN(args[0]))
-            return message.channel.send('**Please supply a valid amount to purges messages**');
+            return message.channel.send('**Please Supply A Valid Amount To Delete Messages!**');
 
         if (args[0] > 100)
-            return message.channel.send("**Please supply a number less than 100**");
+            return message.channel.send("**Please Supply A Number Less Than 100!**");
 
         if (args[0] < 1)
-            return message.channel.send("**Please supply a number more than 1 or 1**");
+            return message.channel.send("**Please Supply A Number More Than 1!**");
 
         message.channel.bulkDelete(args[0])
-            .then(messages => message.channel.send(`**Succesfully deleted \`${messages.size}/${args[0]}\` messages**`).then(msg => msg.delete({ timeout: 2000 })))
+            .then(messages => message.channel.send(`**Succesfully Deleted \`${messages.size}/${args[0]}\` Messages!**`).then(msg => msg.delete({ timeout: 2000 })))
     }
 }
