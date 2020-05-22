@@ -49,6 +49,7 @@ module.exports = {
             .setFooter(message.guild.name, message.guild.iconURL())
             .addField("**Moderation**", "removerole")
             .addField("**Removed Role from**", rMember.user.username)
+            .addField("**Role Added**", role.name)
             .addField("**Removed By**", message.author.username)
             .addField("**Date**", message.createdAt.toLocaleString())
             .setTimestamp();

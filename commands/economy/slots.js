@@ -14,7 +14,7 @@ module.exports = {
     run: async (bot, message, args) => {
 
     let user = message.author;
-    let moneydb = await db.fetch(`money_${message.guild.id}_${user.id}`)
+    let moneydb = await db.fetch(`money_${user.id}`)
     let money = parseInt(args[0]);
     let win = false;
 
@@ -44,13 +44,13 @@ module.exports = {
             .setDescription(`${slotItems[number[0]]} | ${slotItems[number[1]]} | ${slotItems[number[2]]}\n\nYou won ${money} coins`)
             .setColor("GREEN")
         message.channel.send(slotsEmbed1)
-        db.add(`money_${message.guild.id}_${user.id}`, money)
+        db.add(`money_${user.id}`, money)
     } else {
         let slotsEmbed = new MessageEmbed()
             .setDescription(`${slotItems[number[0]]} | ${slotItems[number[1]]} | ${slotItems[number[2]]}\n\nYou lost ${money} coins`)
             .setColor("GREEN")
         message.channel.send(slotsEmbed)
-        db.subtract(`money_${message.guild.id}_${user.id}`, money)
+        db.subtract(`money_${user.id}`, money)
     }
 
 }

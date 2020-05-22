@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
+const { PREFIX } = require('../../config')
 const musictriviajson = require('../../JSON/musictrivia.json')
 const db = require('quick.db');
 
@@ -13,7 +14,14 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
-        const prefix = await db.fetch(`prefix_${message.guild.id}`)
+        let prefix;
+        let fetched = await db.fetch(`prefix_${message.guild.id}`);
+
+        if (fetched === null) {
+            prefix = PREFIX
+        } else {
+            prefix = fetched
+        }
 
         const noperm = new MessageEmbed()
             .setColor("GREEN")
@@ -203,7 +211,7 @@ module.exports = {
 
                             const embed = new MessageEmbed()
                                 .setColor('GREEN')
-                                .setTitle(`**The song was  ${song}**`)
+                                .setTitle(`**The song was - ${song}**`)
                                 .setDescription(
                                     getLeaderBoard(Array.from(sortedScoreMap.entries()))
                                 );

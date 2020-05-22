@@ -3,6 +3,7 @@ const { PREFIX } = require('../../config');
 const queue2 = new Map();
 const queue3 = new Map();
 const queue = new Map();
+const games = new Map()
 
 module.exports = async (bot, message) => {
     try {
@@ -25,7 +26,8 @@ module.exports = async (bot, message) => {
         let ops = {
             queue2: queue2,
             queue: queue,
-            queue3: queue3
+            queue3: queue3,
+            games: games
         }
 
         var commandfile = bot.commands.get(cmd) || bot.commands.get(bot.aliases.get(cmd))

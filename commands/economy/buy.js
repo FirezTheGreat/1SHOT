@@ -23,7 +23,7 @@ module.exports = {
             prefix = fetched
         }
       
-        let author = db.fetch(`money_${message.guild.id}_${user.id}`)
+        let author = db.fetch(`money_${user.id}`)
 
         let Embed = new MessageEmbed()
             .setColor("GREEN")
@@ -33,14 +33,14 @@ module.exports = {
         if (args.join(' ').toLocaleLowerCase() == 'bronze') {
             if (author < 200) return message.channel.send(Embed)
 
-            db.fetch(`bronze_${message.guild.id}_${user.id}`);
-            db.set(`bronze_${message.guild.id}_${user.id}`, true)
+            await db.fetch(`bronze_${user.id}`);
+            db.set(`bronze_${user.id}`, true)
 
             let Embed2 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`✅ Purchased Bronze VIP For 200 Coins`);
 
-            db.subtract(`money_${message.guild.id}_${user.id}`, 200)
+            db.subtract(`money_${user.id}`, 200)
             message.channel.send(Embed2)
         } else if (args.join(' ').toLocaleLowerCase() == 'nikes') {
             let Embed3 = new MessageEmbed()
@@ -49,14 +49,14 @@ module.exports = {
 
             if (author < 600) return message.channel.send(Embed3)
 
-            db.fetch(`nikes_${message.guild.id}_${user.id}`)
-            db.add(`nikes_${message.guild.id}_${user.id}`, 1)
+            await db.fetch(`nikes_${user.id}`)
+            db.add(`nikes_${user.id}`, 1)
 
             let Embed4 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`✅ Purchased Fresh Nikes For 600 Coins`);
 
-            db.subtract(`money_${message.guild.id}_${user.id}`, 600)
+            db.subtract(`money_${user.id}`, 600)
             message.channel.send(Embed4)
         } else if (args.join(' ').toLocaleLowerCase() == 'car') {
             let Embed5 = new MessageEmbed()
@@ -65,8 +65,8 @@ module.exports = {
 
             if (author < 800) return message.channel.send(Embed5)
 
-            db.fetch(`car_${message.guild.id}_${user.id}`)
-            db.add(`car_${message.guild.id}_${user.id}`, 1)
+            await db.fetch(`car_${user.id}`)
+            db.add(`car_${user.id}`, 1)
 
             let Embed6 = new MessageEmbed()
                 .setColor("GREEN")
@@ -81,14 +81,14 @@ module.exports = {
 
             if (author < 1200) return message.channel.send(Embed7)
 
-            db.fetch(`house_${message.guild.id}_${user.id}`)
-            db.add(`house_${message.guild.id}_${user.id}`, 1)
+            await db.fetch(`house_${user.id}`)
+            db.add(`house_${user.id}`, 1)
 
             let Embed8 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`✅ Purchased A Mansion For 1200 Coins`);
 
-            db.subtract(`money_${message.guild.id}_${user.id}`, 1200)
+            db.subtract(`money_${user.id}`, 1200)
             message.channel.send(Embed8)
         } else {
             if (message.content.toLowerCase() === `${prefix}buy`) {

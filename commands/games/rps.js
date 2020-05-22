@@ -6,8 +6,8 @@ const chooseArr = ["🗻", "📰", "✂"];
 module.exports = {
     config: {
         name: "rps",
-        category: "fun",
-        noalias: "No Aliases",
+        category: "games",
+        aliases: ['rockpaperscissors'],
         description: "Rock Paper Scissors Game. React to one of the emojis to play the game.",
         usage: " ",
         accessableby: "everyone"
@@ -17,7 +17,7 @@ module.exports = {
             .setColor("GREEN")
             .setAuthor(message.member.displayName, message.author.displayAvatarURL())
             .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL())
-            .setDescription("Add a reaction to one of those emojis to play the game!")
+            .setDescription("**Play A Game of RPS Against The Bot!\nSelect Reactions To Play!**")
             .setTimestamp();
 
         const m = await message.channel.send(embed);
@@ -30,7 +30,7 @@ module.exports = {
 
         embed
             .setDescription("")
-            .addField(result, `${reacted} vs ${botChoice}`);
+            .addField(`**${result}**`, `${reacted} vs ${botChoice}`);
 
         m.edit(embed);
 

@@ -1,5 +1,4 @@
 const ownerid = "457556815345877003";
-const Discord = require("discord.js");
 
 module.exports = {
     config: {
@@ -17,23 +16,24 @@ module.exports = {
         if (!args[0]) return message.channel.send("Enter An Name")
 
         if(args[0]){
+            let fetched = bot.guilds.cache.find(g => g.name === args.join(" "));
             let found = bot.guilds.cache.get(args[0]);
-            if(!found){
-                found = bot.guilds.cache.find(g => g.name === args.join(" "));
-                if(found){
-                    guild = found;
+            if(!found) {
+                if(fetched) {
+                    guild = fetched;
                 }
+            } else {
+                guild = found
             }
         } else {
             return message.channel.send("Invalid Name!");
         }
-
         if(guild){
             let tChannel = guild.channels.cache.find(ch => ch.type == "text" && ch.permissionsFor(ch.guild.me).has("CREATE_INSTANT_INVITE"));
-            if(!tChannel){
+            if(!tChannel) {
                 return message.channel.send("An Error Has Occured Try Again!"); 
             }
-            let invite = await tChannel.createInvite({ maxAge: 0 }).catch(err => {
+            let invite = await tChannel.createInvite({ temporary: false, maxAge: 0 }).catch(err => {
                 return message.channel.send(`${err} has occured!`);
             });
             message.channel.send(invite.url);

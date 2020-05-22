@@ -30,21 +30,30 @@ module.exports = {
         } else {
             muterole = message.guild.roles.cache.get(dbmute)
         }
+      
+        let rolefetched = db.fetch(`muteeid_${message.guild.id}_${mutee.id}`)
+        if (!rolefetched) return;
 
         if (!muterole) return message.channel.send("**There Is No Mute Role To Remove!**")
         if (!mutee.roles.cache.has(muterole.id)) return message.channel.send("**User is not Muted!**")
-
+        try {
         mutee.roles.remove(muterole.id).then(() => {
-            mutee.send(`Hello, you have been unmuted in ${message.guild.name} for ${reason || "**No Reason**"}`).catch(err => console.log(err))
-            let roleadds = db.fetch(`muteeid_${message.guild.id}_${mutee.id}`)
+            mutee.send(`**Hello, You Have Been Unmuted In ${message.guild.name} for ${reason || "No Reason"}**`).catch(() => null)
+            let roleadds = rolefetched
+            if (!roleadds) return;
             mutee.roles.add(roleadds)
-
+        })
+        } catch {
+            let roleadds2 = rolefetched
+            if (!roleadds2) return;
+            mutee.roles.add(roleadds2)                            
+          }
             const sembed = new MessageEmbed()
                 .setColor("GREEN")
                 .setAuthor(message.guild.name, message.guild.iconURL())
                 .setDescription(`${mutee.user.username} was successfully unmuted.`)
             message.channel.send(sembed);
-        });
+        
 
         let channel = db.fetch(`modlog_${message.guild.id}`)
         if (!channel) return;

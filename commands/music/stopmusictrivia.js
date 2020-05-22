@@ -27,8 +27,8 @@ module.exports = {
             triviaData.triviaQueue.length = 0;
             triviaData.wasTriviaEndCalled = true;
             triviaData.triviaScore.clear();
-            serverQueue.connection.dispatcher.end();
-            return message.channel.send('⏩ Music Trivia Skipped');
+            message.guild.me.voice.channel.leave()
+          return message.channel.send('⏩ Music Trivia Skipped');
         }
         catch (e) {
             console.log(e)

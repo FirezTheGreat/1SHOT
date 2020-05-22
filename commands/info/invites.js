@@ -11,7 +11,7 @@ module.exports = {
     },
     run: async (bot, message, args) => {
         try {
-            let member = await message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username == args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member;
+            let member = await message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.guild.members.cache.find(r => r.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member;
 
             let invites = await message.guild.fetchInvites()
 

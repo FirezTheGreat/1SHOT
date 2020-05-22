@@ -43,7 +43,6 @@ module.exports = {
                     var videos = await youtube.searchVideos(searchString, 1);
                     var video = await youtube.getVideoByID(videos[0].id);
                 } catch (err) {
-                    console.error(err)
                     return message.channel.send('❌ **No matches**')
                 }
             }

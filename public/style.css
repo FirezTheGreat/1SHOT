@@ -1,6 +1,11 @@
 /* this file is loaded by index.html and styles the page */
 
-* {
+* @font-face {
+  font-family: 'RobotoRegular'; /* This is an arbitrary name -- whatever works for you */
+  src: url('https://cdn.glitch.com/ccfc9e2e-e1fa-4dd0-838d-c3b5bb122b10%2FRoboto-Regular.ttf?v=1589505810525');
+       url('https://cdn.glitch.com/ccfc9e2e-e1fa-4dd0-838d-c3b5bb122b10%2FRoboto-Regular.ttf?v=1589505810525') format('ttf'),
+}
+{
   box-sizing: border-box;
 }
 
@@ -53,4 +58,8 @@ footer {
   margin-top: 3em;
   padding-top: 1.5em;
   border-top: 1px solid lightgrey;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
 }

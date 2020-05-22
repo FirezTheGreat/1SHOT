@@ -12,6 +12,7 @@ module.exports = {
   },
   run: async (bot, message, args) => {
 try {
+  let user2 = message.author
     if (!args[0]) return message.channel.send("**Please Enter A User!**");
     let user =
       message.mentions.members.first() ||
@@ -23,41 +24,8 @@ try {
         r => r.displayName.toLowerCase() === args[0].toLocaleLowerCase()
       );
     if (!user) return message.channel.send("**Enter A Valid User!**");
-    let a = [
-      "-",
-      "`",
-      "/",
-      "_",
-      "+",
-      "=",
-      ";",
-      ":",
-      ".",
-      ",",
-      "?",
-      "|",
-      "'",
-      '"',
-      ">",
-      "<",
-      "}",
-      "{",
-      "[",
-      "]",
-      ")",
-      "(",
-      "*",
-      "&",
-      "^",
-      "%",
-      "$",
-      "#",
-      "@",
-      "!",
-      "~"
-    ];
 
-    let member = db.fetch(`money_${message.guild.id}_${message.author.id}`);
+    let member = db.fetch(`money_${user2.id}`);
 
     let embed1 = new MessageEmbed()
       .setColor("GREEN")
@@ -83,9 +51,9 @@ try {
     }
     let embed4 = new MessageEmbed()
       .setColor("GREEN")
-      .setDescription(`❌ Cannot Add Negative Amount!`);
+      .setDescription(`❌ Enter A Valid Amount!`);
 
-    if (!parseInt(args[1])) {
+    if (isNaN(args[1])) {
       return message.channel.send(embed4);
     }
     let embed5 = new MessageEmbed()
@@ -101,10 +69,10 @@ try {
       .setDescription(`✅ You have payed ${user.displayName} ${args[1]} coins`);
 
     message.channel.send(embed6);
-    db.add(`money_${message.guild.id}_${user.user.id}`, args[1]);
-    db.subtract(`money_${message.guild.id}_${message.author.id}`, args[1]);
+    db.add(`money_${user.id}`, args[1]);
+    db.subtract(`money_${user2.id}`, args[1]);
     } catch {
-
+        
     }
   }
 };

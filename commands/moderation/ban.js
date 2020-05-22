@@ -23,10 +23,10 @@ module.exports = {
             var reason = args.slice(1).join(" ");
 
             if (!banMember.bannable) return message.channel.send("**Cant Kick That User**")
-            if (banMember.user.dmChannel) {
-            banMember.send(`Hello, you have been banned from ${message.guild.name} for: ${reason || "No Reason"}`).then(() =>
-                message.guild.members.ban(banMember, { days: 7, reason: reason })).catch(e => null)
-            } else {
+            try {
+            banMember.send(`**Hello, You Have Been Banned From ${message.guild.name} for - ${reason || "No Reason"}**`).then(() =>
+                message.guild.members.ban(banMember, { days: 7, reason: reason })).catch(() => null)
+            } catch {
                 message.guild.members.ban(banMember, { days: 7, reason: reason })
             }
             if (reason) {

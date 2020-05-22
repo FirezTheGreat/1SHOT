@@ -3,7 +3,7 @@ const db = require('quick.db');
 module.exports = {
     config: {
         name: "setprefix",
-        aliases: ['sp'],
+        aliases: ['sp', 'prefix'],
         category: "moderation",
         description: "Sets Custom Prefix",
         usage: "[prefix]",
@@ -12,7 +12,15 @@ module.exports = {
     run: async (bot, message, args) => {
         if (!message.member.hasPermission('ADMINISTRATOR')) return message.channel.send("**You Do Not Have Sufficient Permissions! - [ADMINISTRATOR]**")
 
-        if (!args[0]) return message.channel.send("**Please Enter A Prefix!**")
+        if (!args[0]) {
+          let b = await db.fetch(`prefix_${message.guild.id}`);
+          if (b) {
+        return message.channel.send(
+          `**Prefix Of This Server is \`${b}\`**`
+        );
+      } else return message.channel.send("**Please Enter A Prefix To Set!**");
+    } 
+      
         try {
 
             let a = args.join(' ');

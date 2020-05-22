@@ -14,19 +14,19 @@ module.exports = {
 
         let user = message.author;
 
-        let member = db.fetch(`money_${message.guild.id}_${user.id}`)
+        let member = db.fetch(`money_${user.id}`)
 
         if (args[0] == 'all') {
-            let money = await db.fetch(`money_${message.guild.id}_${user.id}`)
+            let money = await db.fetch(`money_${user.id}`)
 
             let embedbank = new MessageEmbed()
                 .setColor('GREEN')
                 .setDescription("❌ You don't have any money to deposit")
 
-            if (money === 0) return message.channel.send(embedbank)
+            if (!money) return message.channel.send(embedbank)
 
-            db.subtract(`money_${message.guild.id}_${user.id}`, money)
-            db.add(`bank_${message.guild.id}_${user.id}`, money)
+            db.subtract(`money_${user.id}`, money)
+            db.add(`bank_${user.id}`, money)
             let sembed = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`✅ You have deposited all your coins into your bank`);
@@ -70,8 +70,8 @@ module.exports = {
                 .setDescription(`✅ You have deposited ${args[0]} coins into your bank`);
 
             message.channel.send(embed5)
-            db.subtract(`money_${message.guild.id}_${user.id}`, args[0])
-            db.add(`bank_${message.guild.id}_${user.id}`, args[0])
+            db.subtract(`money_${user.id}`, args[0])
+            db.add(`bank_${user.id}`, args[0])
 
         }
     }

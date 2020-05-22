@@ -96,7 +96,6 @@ module.exports = {
         message.channel.send(fourthLyricsEmbed);
       }
     } catch (e) {
-      console.log(e)
       return sentMessage.edit(
         '**Not Available**'
       );

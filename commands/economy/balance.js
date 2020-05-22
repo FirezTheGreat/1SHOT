@@ -23,11 +23,11 @@ module.exports = {
       ) ||
       message.member;
 
-    let bal = db.fetch(`money_${message.guild.id}_${user.id}`);
+    let bal = db.fetch(`money_${user.id}`);
 
     if (bal === null) bal = 0;
 
-    let bank = await db.fetch(`bank_${message.guild.id}_${user.id}`);
+    let bank = await db.fetch(`bank_${user.id}`);
 
     if (bank === null) bank = 0;
 

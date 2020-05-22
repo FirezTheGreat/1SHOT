@@ -11,7 +11,7 @@ module.exports = {
         accessableby: "everyones"
     },
     run: async (bot, message, args) => {
-        let user = await message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username === args.join(' ')) || message.guild.members.cache.find(r => r.displayName === args.join(' ')) || message.member,
+        let user = await message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.guild.members.cache.find(r => r.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member,
         m = await message.channel.send("**Please Wait...**"),
         canvas = Canvas.createCanvas(632, 357),
         ctx = canvas.getContext("2d");

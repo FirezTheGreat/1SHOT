@@ -17,7 +17,7 @@ run: async (bot, message, args, ops) => {
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
         if (!serverQueue.songs) return message.channel.send('❌ **There are No Songs In The Queue!')
         serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end();
+        serverQueue.connection.dispatcher.end()
         return message.channel.send("Skipped All Songs");
     }
 };

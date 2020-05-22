@@ -65,8 +65,13 @@ module.exports = {
             if (mutee.roles.cache.has(muterole.id)) return message.channel.send("**User Is Already Muted!**")
 
             db.set(`muteeid_${message.guild.id}_${mutee.id}`, userRoles)
+          try {
             mutee.roles.set([muterole.id]).then(() => {
-                mutee.send(`Hello, you have been muted in ${message.guild.name} for ${reason || "No Reason"}`).catch(err => console.log(err))
+                mutee.send(`**Hello, You Have Been Muted In ${message.guild.name} for - ${reason || "No Reason"}`).catch(() => null)
+            })
+            } catch {
+                 mutee.roles.set([muterole.id])                               
+            }
                 if (reason) {
                 const sembed = new MessageEmbed()
                     .setColor("GREEN")
@@ -80,7 +85,7 @@ module.exports = {
                     .setDescription(`${mutee.user.username} was successfully muted`)
                 message.channel.send(sembed2);
                 }
-            })
+            
             let channel = db.fetch(`modlog_${message.guild.id}`)
             if (!channel) return;
 
@@ -88,19 +93,19 @@ module.exports = {
                 .setColor(redlight)
                 .setThumbnail(mutee.user.displayAvatarURL({ dynamic: true }))
                 .setAuthor(`${message.guild.name} Modlogs`, message.guild.iconURL())
-                .addField("Moderation:", "mute")
-                .addField("Mutee:", mutee.user.username)
-                .addField("Moderator:", message.author.username)
-                .addField("Reason:", `${reason || "**No Reason**"}`)
-                .addField("Date:", message.createdAt.toLocaleString())
+                .addField("**Moderation**", "mute")
+                .addField("**Mutee**", mutee.user.username)
+                .addField("**Moderator**", message.author.username)
+                .addField("**Reason**", `${reason || "**No Reason**"}`)
+                .addField("**Date**", message.createdAt.toLocaleString())
                 .setFooter(message.member.displayName, message.author.displayAvatarURL())
                 .setTimestamp()
 
             var sChannel = message.guild.channels.cache.get(channel)
             if (!sChannel) return;
             sChannel.send(embed)
-        } catch (e) {
-            console.log(e)
+        } catch {
+            return;
         }
     }
 }

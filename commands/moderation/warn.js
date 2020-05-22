@@ -17,18 +17,21 @@ module.exports = {
 
         let target = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
         if (!target) return message.channel.send("**Please Enter A User!**")
+        if (target.id === message.member.id) return message.channel.send("**Cannot Warn Yourself!**")
         
         let reason = args.slice(1).join(" ")
 
         if (target.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) return message.channel.send('**Cannot Warn This User!**')
         if (target.hasPermission("MANAGE_GUILD") || target.user.bot) return message.channel.send("**Cannot Warn This User!**")
-
+      try {
         const sembed2 = new MessageEmbed()
             .setColor("RED")
-            .setDescription(`Hello, you have been warned in ${message.guild.name} for: ${reason || "No Reason!"}`)
+            .setDescription(`**Hello, You Have Been Warned In ${message.guild.name} for - ${reason || "No Reason!"}**`)
             .setFooter(message.guild.name, message.guild.iconURL())
         target.send(sembed2)
-
+      } catch {
+        
+      }
         if (reason) {
         const embed = new MessageEmbed()
             .setColor("GREEN")

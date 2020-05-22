@@ -1,11 +1,11 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     config: {
         name: 'nowplaying',
         category: "music",
         aliases: ["np"],
-        description: 'Now playing command.',
+        description: 'Now playing command',
         usage: "Shows current song playing",
         accessableby: "everyone"
     },

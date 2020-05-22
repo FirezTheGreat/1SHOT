@@ -64,6 +64,7 @@ module.exports = {
             **Server Prefix Is \`${prefix}\`**\n
             ** Command -** ${command.name.slice(0, 1).toUpperCase() + command.name.slice(1)}\n
             ** Description -** ${command.description || "No Description provided."}\n
+            **Category -** ${command.category}\n
             ** Usage -** ${command.usage ? `\`${prefix}${command.name} ${command.usage}\`` : "No Usage"}\n
             ** Accessible by -** ${command.accessableby || "everyone"}\n
             ** Aliases -** ${command.aliases ? command.aliases.join(", ") : "None."}`)

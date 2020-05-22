@@ -30,7 +30,7 @@ module.exports = {
 
         let colour = args[0];
         let money = parseInt(args[1]);
-        let moneydb = await db.fetch(`money_${message.guild.id}_${user.id}`)
+        let moneydb = await db.fetch(`money_${user.id}`)
 
         let random = Math.floor((Math.random() * 10));
 
@@ -58,31 +58,32 @@ module.exports = {
 
         if (random == 1 && colour == 2) { // Green
             money *= 15
-            db.add(`money_${message.guild.id}_${user.id}`, money)
+            db.add(`money_${user.id}`, money)
             let moneyEmbed1 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`✅ You won ${money} coins\n\nMultiplier: 15x`);
             message.channel.send(moneyEmbed1)
         } else if (isOdd(random) && colour == 1) { // Red
             money = parseInt(money * 1.5)
-            db.add(`money_${message.guild.id}_${user.id}`, money)
+            db.add(`money_${user.id}`, money)
             let moneyEmbed2 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`🔴 You won ${money} coins\n\nMultiplier: 1.5x`);
             message.channel.send(moneyEmbed2)
         } else if (!isOdd(random) && colour == 0) { // Black
             money = parseInt(money * 2)
-            db.add(`money_${message.guild.id}_${user.id}`, money)
+            db.add(`money_${user.id}`, money)
             let moneyEmbed3 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`⬛ You won ${money} coins\n\nMultiplier: 2x`);
             message.channel.send(moneyEmbed3)
         } else { // Wrong
-            db.subtract(`money_${message.guild.id}_${user.id}`, money)
+            db.subtract(`money_${user.id}`, money)
             let moneyEmbed4 = new MessageEmbed()
                 .setColor("GREEN")
                 .setDescription(`❌ You lost ${money} coins\n\nMultiplier: 0x`);
             message.channel.send(moneyEmbed4)
         }
+          db.add(`games_${user.id}`, 1)
     }
 }

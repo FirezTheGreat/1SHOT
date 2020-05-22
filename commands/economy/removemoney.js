@@ -19,11 +19,11 @@ module.exports = {
 
         if (!args[1]) return message.channel.send("**Please Enter A Amount!**")
         if (isNaN(args[1])) return message.channel.send("**Enter Valid Amount!**");
-        let bal = await db.fetch(`money_${message.guild.id}_${user.id}`)
+        let bal = await db.fetch(`money_${user.id}`)
 
         if (args[0] > bal) return message.channel.send("**Cannot Remove That Much Money!**")
-        db.subtract(`money_${message.guild.id}_${user.id}`, args[1])
-        let bal2 = await db.fetch(`money_${message.guild.id}_${user.id}`)
+        db.subtract(`money_${user.id}`, args[1])
+        let bal2 = await db.fetch(`money_${user.id}`)
 
         let moneyEmbed = new MessageEmbed()
             .setColor("GREEN")

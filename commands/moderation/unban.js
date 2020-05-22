@@ -20,7 +20,7 @@ module.exports = {
 
         let bannedMember;
         bannedMember = bannedMemberInfo.find(b => b.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || bannedMemberInfo.get(args[0]) || bannedMemberInfo.find(bm => bm.user.tag.toLowerCase() === args[0].toLocaleLowerCase());
-        if (!bannedMember) return message.channel.send("**Please Provide A Valid Username, Tag Or ID!**")
+        if (!bannedMember) return message.channel.send("**Please Provide A Valid Username, Tag Or ID Or The User Is Not Banned!**")
 
         let reason = args.slice(1).join(" ")
 
@@ -41,8 +41,8 @@ module.exports = {
                     .setDescription(`**${bannedMember.user.tag} has been unbanned**`)
                 message.channel.send(sembed2)
             }
-        } catch (e) {
-            console.log(e.message)
+        } catch {
+            
         }
 
         let channel = db.fetch(`modlog_${message.guild.id}`)

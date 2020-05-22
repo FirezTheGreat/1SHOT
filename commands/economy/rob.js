@@ -13,6 +13,7 @@ module.exports = {
   },
   run: async (bot, message, args) => {
     if (!args[0]) return message.channel.send("**Enter A Name!**")  
+    let user2 = message.author
 
     let user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.guild.members.cache.find(r => r.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase());
     if (!user) return message.channel.send("**Enter A Valid User!**")
@@ -25,9 +26,9 @@ module.exports = {
       return message.channel.send(embed2)
     }
 
-    let targetuser = await db.fetch(`money_${message.guild.id}_${user.id}`)
-    let author = await db.fetch(`rob_${message.guild.id}_${user.id}`)
-    let author2 = await db.fetch(`money_${message.guild.id}_${message.author.id}`)
+    let targetuser = await db.fetch(`money_${user.id}`)
+    let author = await db.fetch(`rob_${user.id}`)
+    let author2 = await db.fetch(`money_${user2.id}`)
 
     let timeout = 600000;
 
@@ -63,9 +64,9 @@ module.exports = {
           .setColor("GREEN")
         message.channel.send(embed)
 
-        db.subtract(`money_${message.guild.id}_${user.user.id}`, random)
-        db.add(`money_${message.guild.id}_${message.author.id}`, random)
-        db.set(`rob_${message.guild.id}_${user.user.id}`, Date.now())
+        db.subtract(`money_${user.id}`, random)
+        db.add(`money_${user2.id}`, random)
+        db.set(`rob_${user.id}`, Date.now())
 
       }
     };

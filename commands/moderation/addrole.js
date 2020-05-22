@@ -18,8 +18,8 @@ module.exports = {
         if (!args[0]) return message.channel.send("**Please Enter A Role!**")
 
         let rMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
-        if (rMember.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) return message.channel.send('**Cannot Add Role To This User!**')
         if (!rMember) return message.channel.send("**Please Enter A User Name!**");
+        if (rMember.roles.highest.comparePositionTo(message.guild.me.roles.highest) >= 0) return message.channel.send('**Cannot Add Role To This User!**')
 
         let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[1]) || message.guild.roles.cache.find(rp => rp.name.toLowerCase() === args.slice(1).join(' ').toLocaleLowerCase());
         if (!args[1]) return message.channel.send("**Please Enter A Role!**")
@@ -47,6 +47,7 @@ module.exports = {
             .setFooter(message.guild.name, message.guild.iconURL())
             .addField("**Moderation**", "addrole")
             .addField("**Added Role to**", rMember.user.username)
+            .addField("**Role Added**", role.name)
             .addField("**Added By**", message.author.username)
             .addField("**Date**", message.createdAt.toLocaleString())
             .setTimestamp();
