@@ -38,7 +38,7 @@ This repo provides support to everyone, feel free to open an issue
         - tts
         - urbandictionary
         
-  * Games
+   * Games
         - akinator
         - blackjack
         - connectfour
