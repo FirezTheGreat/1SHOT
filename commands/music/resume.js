@@ -14,11 +14,16 @@ module.exports = {
         if (message.guild.me.voice.channel !== message.member.voice.channel) {
             return message.channel.send("**You Have To Be In The Same Channel With The Bot!**");
         }
+      try {
         if (serverQueue && !serverQueue.playing) {
             serverQueue.playing = true;
             serverQueue.connection.dispatcher.resume();
             return message.channel.send('▶ **Resumed**');
         }
         return message.channel.send('**There is nothing to resume**.');
+      } catch {
+        serverQueue.connection.dispatcher.end();
+        return message.channel.send("**Something Went Wrong!**")
+      }
     }
 };

@@ -32,10 +32,7 @@ module.exports = {
         c => c.name.toLowerCase() === args.join(" ").toLocaleLowerCase()
       );
     
-    if (!channel)
-      return message.channel.send(
-        "**Channel Not Found!**"
-      );
+    if (!channel || channel.type !== 'text') return message.channel.send("**Please Enter A Valid Text Channel!**");
 
     try {
       let a = await db.fetch(`welcome_${message.guild.id}`);
@@ -57,9 +54,7 @@ module.exports = {
       }
       return;
     } catch (e) {
-      return message.channel.send(
-        "**Error - `Missing Permissions or Channel Doesn't Exist`**"
-      );
+            return message.channel.send("**Error - `Missing Permissions Or Channel Is Not A Text Channel!`**");
     }
   }
 };

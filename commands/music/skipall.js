@@ -15,9 +15,15 @@ run: async (bot, message, args, ops) => {
           }
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
-        if (!serverQueue.songs) return message.channel.send('❌ **There are No Songs In The Queue!')
+        if (!serverQueue.songs) return message.channel.send('❌ **There are No Songs In The Queue!');
+      try {
         serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end()
-        return message.channel.send("Skipped All Songs");
+        serverQueue.connection.dispatcher.end();
+        return message.channel.send("**Skipped All Songs**");
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          await channel.leave();
+          return message.channel.send("**Something Went Wrong!**");
+      }
     }
 };

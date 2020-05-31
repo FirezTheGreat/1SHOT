@@ -17,11 +17,15 @@ module.exports = {
         };
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
-
+      try {
         if (args[0] < 1 && args[0] >= serverQueue.songs.length) {
             return message.channel.send('**Please Enter A Valid Song Number!**');
         }
         serverQueue.songs.splice(args[0] - 1, 1);
         return message.channel.send(`Removed song number ${args[0]} from queue`);
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          return message.channel.send("**Something Went Wrong!**")
+      }
     }
 };

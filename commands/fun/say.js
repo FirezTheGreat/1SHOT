@@ -5,13 +5,13 @@ module.exports = {
     config: {
         name: "say",
         category: "fun",
-        noalias: "No Aliases",
+        noalias: [''],
         description: "Says your input via the bot",
         usage: "[text]",
         accessableby: "everyone"
     },
-    run: (bot, message, args) => {
-
+    run: async (bot, message, args) => {
+      try {
         if (args.length === 0)
             return message.channel.send("**Enter Some Text!**")
         message.delete({ timeout: 1000 })
@@ -21,5 +21,8 @@ module.exports = {
             .setColor(greenlight);
 
         message.channel.send(embed)
-    }
-}
+      } catch (e) {
+          throw e;
+      };
+  }
+};

@@ -1,98 +1,90 @@
-const fetch = require("node-fetch");
-const db = require('quick.db');
+const request = require('node-superfetch');
+const { createCanvas, registerFont } = require('canvas');
+const path = require('path');
+const { wrapText } = require('../../functions');
+registerFont(path.join(__dirname, '..', '..', 'assets', 'fonts', 'Korrina.otf'), { family: 'Korinna' });
 
 module.exports = {
   config: {
-    name: "trivia",
-    aliases: ["triv"],
-    category: "games",
-    description: "Asks Questions",
-    usage: " ",
-    accessableby: "everyone"
+    name: 'trivia',
+    aliases: ['quiz', 'singletrivia', 'jeopardy'],
+    category: 'games',
+    usage: ' ',
+    description: 'Answer A Trivia Question, Join VC While Playing For More Fun (optional)\n Inspired By The Show Jeopardy',
+    acessableby: 'everyone'
   },
-  run: async (bot, message, args) => {
+  run: async (bot, message, args, ops) => {
+    const current = ops.games.get(message.channel.id);
+    if (current) return message.channel.send(`**Please Wait Until The Current Game of \`${current.name}\` is Finished!**`);
+    const { channel } = message.member.voice;
     try {
-      let body = await fetch(
-        "https://opentdb.com/api.php?amount=1&type=multiple"
-      );
-      let data = await body.json();
-      let trivia = data.results[0];
-      let time = 30 * 1000;
-
-      let answers = trivia.incorrect_answers;
-      answers.push(trivia.correct_answer);
-      answers = answers.map(m => {
-        return decodeURIComponent(m);
-      });
-      answers.sort(function(a, b) {
-        let answerA = a.toLowerCase();
-        let answerB = b.toLowerCase();
-        if (answerA < answerB) {
-          return -1;
-        }
-        if (answerA > answerB) {
-          return 1;
-        }
-        return 0;
-      });
-      let front = answers
-        .map(m => `${answers.indexOf(m) + 1}) *${m}*`)
-        .join("\n");
-
-      await message.channel.send({
-        embed: {
-          title: `${message.author.username}'s trivia question.`,
-          color: "GREEN",
-          description:
-            `**${decodeURIComponent(
-              trivia.question
-            )}**\n*Please choose an answer within ${time / 1000}s*\n\n` + front,
-          fields: [
-            {
-              name: "Difficulty",
-              value: `\`${decodeURIComponent(trivia.difficulty)}\``,
-              inline: true
-            },
-            {
-              name: "Category",
-              value: `\`${decodeURIComponent(trivia.category)}\``,
-              inline: true
+      ops.games.set(message.channel.id, { name: 'trivia' });
+      const question = await fetchQuestion();
+      const clueCard = await generateClueCard(question.question.replace(/<\/?i>/gi, ''));
+      let connection;
+      try {
+        if (channel) {
+          connection = message.guild ? await channel.join() : null;
+          if (connection) {
+            connection.play(path.join(__dirname, '..', '..', 'assets', 'sounds', 'jeopardy.mp3'));
+            if (message.channel.permissionsFor(bot.user).has('ADD_REACTIONS')) {
+              await message.react('🔉');
+            } else {
+              return message.channel.send("**Missing Permissions - [ADD_REACTIONS]!**")
             }
-          ],
-          footer: { text: "You Can Use The Number Or The Word To Answer!" }
+          }
         }
-      });
-
-      var choice = await message.channel.awaitMessages(message2 => message2, {
-        max: 1,
-        time: 30000,
-        errors: ["time"]
-      });
-      if (!choice.size) {
-        return await message.channel.send("**Time Is Up**");
-      } else if (
-        choice
-          .first()
-          .content.includes(
-            decodeURIComponent(trivia.correct_answer).toLocaleLowerCase()
-          )
-      ) {
-        return await message.channel.send("**Correct Answer**");
-      } else if (
-        Number(choice.first().content) ===
-        answers.indexOf(decodeURIComponent(trivia.correct_answer)) + 1
-      ) {
-        return message.channel.send("**Correct Answer**");
-      } else {
-        return await message.channel.send(
-          `**The Correct Answer was \`${decodeURIComponent(
-            trivia.correct_answer
-          )}\`**`
-        );
+      } catch {
+        return message.channel.send("**Please Try Again - Connection Timed Out!**")
       }
-      db.add(`games_${message.author.id}`, 1)
-    } catch {
-      return message.channel.send("**Trivia Not Available At This Moment!**");
+      await message.channel.send(`**The Category is - \`${question.category.title.toUpperCase()}\`! 30 Seconds To Answer!**`, {
+        files: [{ attachment: clueCard, name: 'clue-card.png' }]
+      });
+      const messages = await message.channel.awaitMessages(res => res.author.id === message.author.id, {
+        max: 1,
+        time: 30000
+      });
+      if (connection) {
+        connection.dispatcher.end();
+        channel.leave();
+      }
+      const answer = question.answer.replace(/<\/?i>/gi, '*');
+      ops.games.delete(message.channel.id);
+      if (!messages.size) return message.channel.send(`**Time Up, The Answer Was \`${answer}\`!**`);
+      const win = messages.first().content.toLowerCase() === answer.toLocaleLowerCase();
+      if (!win) return message.channel.send(`**The Answer Was ${answer}!**`);
+      return message.channel.send(`**Correct Answer!**`);
+    } catch (err) {
+      console.log(err)
+      ops.games.delete(message.channel.id);
+      return message.channel.send(`**Oh No, An Error Occurred, Try Again Later!**`);
+    }
+    async function fetchQuestion() {
+      const { body } = await request
+        .get('http://jservice.io/api/random')
+        .query({ count: 1 });
+      return body[0];
+    }
+
+    async function generateClueCard(question) {
+      const canvas = createCanvas(1280, 720);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#030e78';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = 'white';
+      ctx.font = '62px Korinna';
+      const lines = await wrapText(ctx, question.toUpperCase(), 813);
+      const topMost = (canvas.height / 2) - (((52 * lines.length) / 2) + ((20 * (lines.length - 1)) / 2));
+      for (let i = 0; i < lines.length; i++) {
+        const height = topMost + ((52 + 20) * i);
+        ctx.fillStyle = 'black';
+        ctx.fillText(lines[i], (canvas.width / 2) + 6, height + 6);
+        ctx.fillStyle = 'white';
+        ctx.fillText(lines[i], canvas.width / 2, height);
+      }
+      return canvas.toBuffer();
     }
   }
 };

@@ -26,12 +26,16 @@ module.exports = {
 
         let nick = args.slice(1).join(' ');
 
+        try {
         member.setNickname(nick)
         const embed = new MessageEmbed()
             .setColor("GREEN")
             .setDescription(`**Changed Nickname of ${member.displayName} to ${nick}**`)
             .setAuthor(message.guild.name, message.guild.iconURL())
         message.channel.send(embed)
+        } catch {
+            return message.channel.send("**Missing Permissions - [CHANGE_NICKNAME]")
+        }
 
         let channel = db.fetch(`modlog_${message.guild.id}`)
         if (!channel) return;

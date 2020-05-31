@@ -15,7 +15,13 @@ module.exports = {
           }
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
+      try {
         serverQueue.connection.dispatcher.end();
         return message.channel.send('⏩ Skipped')
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          await channel.leave();
+          return message.channel.send("**Something Went Wrong!**")
+      }
     }
 };

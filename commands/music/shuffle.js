@@ -19,9 +19,9 @@ module.exports = {
     const serverQueue = ops.queue.get(message.guild.id);
     if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
 
-    if (!serverQueue.songs)
-      return message.channel.send('There are no songs in queue');
-
+    if (!serverQueue.songs || serverQueue.songs.length === 1)
+      return message.channel.send('**There Are No Songs In Queue**');
+  try {
     shuffleQueue(serverQueue.songs);
 
     const titleArray = [];
@@ -35,6 +35,10 @@ module.exports = {
       queueEmbed.addField(`${i + 1}:`, `${titleArray[i]}`);
     }
     return message.channel.send(queueEmbed);
+    } catch {
+      serverQueue.connection.dispatcher.end();
+      return message.channel.send("**Something Went Wrong!**")
+    }
   }
 }
 

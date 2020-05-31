@@ -8,7 +8,6 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
-        const serverQueue = ops.queue3.get(message.guild.id)
         const triviaData = ops.queue2.get(message.guild.id)
         try {
             if (!triviaData.isTriviaRunning)
@@ -30,9 +29,8 @@ module.exports = {
             message.guild.me.voice.channel.leave()
           return message.channel.send('⏩ Music Trivia Skipped');
         }
-        catch (e) {
-            console.log(e)
-            return undefined;
+        catch {        
+            return; 
         }
     }
 };

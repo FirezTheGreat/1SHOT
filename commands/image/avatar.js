@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "avatar",
     aliases: ["av"],
-    category: "fun",
+    category: "image",
     description: "Shows Avatar",
     usage: "[username | nickname | mention | ID](optional)",
     accessableby: "everyone"

@@ -17,18 +17,19 @@ module.exports = {
         };
         const serverQueue = ops.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
-
+      try {
         let currentPage = 0;
         const embeds = generateQueueEmbed(message, serverQueue.songs);
         const queueEmbed = await message.channel.send(`**Current Page - ${currentPage + 1}/${embeds.length}**`, embeds[currentPage]);
         await queueEmbed.react('⬅️');
-        await queueEmbed.react('⏹')
+        await queueEmbed.react('⏹');
         await queueEmbed.react('➡️');
 
         const filter = (reaction, user) => ['⬅️', '⏹', '➡️'].includes(reaction.emoji.name) && (message.author.id === user.id);
-        const collector = queueEmbed.createReactionCollector(filter)
+        const collector = queueEmbed.createReactionCollector(filter);
         
         collector.on('collect', async (reaction, user) => {
+          try {
             if (reaction.emoji.name === '➡️') {
                 if (currentPage < embeds.length - 1) {
                     currentPage++;
@@ -43,7 +44,16 @@ module.exports = {
                 collector.stop();
                 reaction.message.reactions.removeAll();
             }
+            await reaction.users.remove(message.author.id);
+          } catch {
+            serverQueue.connection.dispatcher.end();
+            return message.channel.send("**Missing Permissions - [ADD_REACTIONS, MANAGE_MESSAGES]!**");
+          }
         });
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          return message.channel.send("**Missing Permissions - [ADD_REACTIONS, MANAGE_MESSAGES]!**");
+      }
     }
 };
 

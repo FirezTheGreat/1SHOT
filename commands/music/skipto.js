@@ -22,9 +22,14 @@ module.exports = {
         if (args[0] < 1 && args[0] >= serverQueue.songs.length) {
             return message.channel.send('**Please Enter A Valid Song Number!**');
         }
-
+      try {
         serverQueue.songs.splice(0, args[0] - 2);
         serverQueue.connection.dispatcher.end();
         return;
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          await channel.leave();
+          return message.channel.send("**Something Went Wrong!**");
+      }
     }
 };

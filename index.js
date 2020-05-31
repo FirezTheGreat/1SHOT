@@ -1,6 +1,6 @@
 const { Client, MessageAttachment, Collection, MessageEmbed } = require('discord.js');
 const { PREFIX, TOKEN, DBL_API_KEY } = require('./config');
-const bot = new Client({ disableEveryone: true });
+const bot = new Client({ disableMentions: 'everyone' });
 const DBL = require('dblapi.js');
 const dbl = new DBL(DBL_API_KEY)
 const fs = require("fs");
@@ -40,7 +40,7 @@ bot.on('message', async message => {
     };
   
   try {
-        if (message.mentions.has(bot.user)) {
+        if (message.mentions.has(bot.user) && !message.mentions.has(message.guild.id)) {
             return message.channel.send(`**My Prefix In This Server is - \`${prefix}\`**`)
         }
     } catch {

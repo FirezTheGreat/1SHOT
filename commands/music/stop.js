@@ -1,10 +1,10 @@
 module.exports = {
     config: {
         name: 'stop',
-        aliases: ['leave', 'dc'],
+        noalias: [''],
         category: "music",
         description: "stops the music playing",
-        usage: ', leave',
+        usage: ' ',
         acessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
@@ -14,9 +14,19 @@ module.exports = {
             return message.channel.send("**You Have To Be In The Same Channel With The Bot!**");
           }
         const serverQueue = ops.queue.get(message.guild.id);
-        if (!serverQueue) return message.channel.send('❌ **Nothing playing in this server**');
+      try {
+        if (serverQueue) {
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end()
+        message.guild.me.voice.channel.leave();
+        } else {
+        channel.leave();
+        }
         return message.channel.send('👋 **Disconnected**')
+      } catch {
+          serverQueue.connection.dispatcher.end();
+          await channel.leave();
+          return message.channel.send("**Something Went Wrong!**");
+      }
     }
 };

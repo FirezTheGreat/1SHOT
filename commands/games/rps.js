@@ -13,7 +13,8 @@ module.exports = {
         accessableby: "everyone"
     },
     run: async (bot, message, args) => {
-        const embed = new MessageEmbed()
+      try
+      {     const embed = new MessageEmbed()
             .setColor("GREEN")
             .setAuthor(message.member.displayName, message.author.displayAvatarURL())
             .setFooter(message.guild.me.displayName, bot.user.displayAvatarURL())
@@ -34,6 +35,9 @@ module.exports = {
 
         m.edit(embed);
 
+      } catch {
+          return message.channel.send('**Missing Permissions - [MANAGE_MESSAGES]!**')
+      }
         function getResult(me, botChosen) {
             if ((me === "🗻" && botChosen === "✂") ||
                 (me === "📰" && botChosen === "🗻") ||
@@ -49,3 +53,4 @@ module.exports = {
 
     }
 }
+ 

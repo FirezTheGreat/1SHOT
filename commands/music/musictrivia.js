@@ -258,6 +258,7 @@ module.exports = {
                 console.error(e);
                 ops.queue.delete(message.guild.id)
                 await channel.leave();
+                return message.channel.send("**Something Went Wrong!**");
             }
         }
 

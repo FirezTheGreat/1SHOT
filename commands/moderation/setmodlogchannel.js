@@ -25,7 +25,7 @@ module.exports = {
     }
         let channel = message.mentions.channels.first() || bot.guilds.cache.get(message.guild.id).channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
 
-        if (!channel) return message.channel.send("**Please Enter Channel Name or ID!**")
+        if (!channel || channel.type !== 'text') return message.channel.send("**Please Enter A Valid Text Channel!**");
 
         try {
             let a = await db.fetch(`modlog_${message.guild.id}`)
@@ -38,8 +38,8 @@ module.exports = {
 
                 message.channel.send(`**Modlog Channel Has Been Set Successfully in \`${channel.name}\`!**`)
             }
-        } catch (e) {
-            return message.channel.send("**Error - `Missing Permissions or Channel Doesn't Exist!`**", `\n${e.message}`)
+        } catch {
+            return message.channel.send("**Error - `Missing Permissions Or Channel Is Not A Text Channel!`**");
         }
     }
 };

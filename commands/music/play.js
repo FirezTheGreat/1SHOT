@@ -10,7 +10,7 @@ module.exports = {
         description: 'Play command',
         aliases: ["p"],
         category: "music",
-        usage: '[song ( name | link)]',
+        usage: '[song (name | link)]',
         accessableby: "everyone"
     },
     run: async (bot, message, args, ops) => {
@@ -43,11 +43,12 @@ module.exports = {
                     var videos = await youtube.searchVideos(searchString, 1);
                     var video = await youtube.getVideoByID(videos[0].id);
                 } catch (err) {
-                    return message.channel.send('❌ **No matches**')
+                    console.error(err)
+                    return message.channel.send('❌ **No Matches!**')
                 }
             }
             return handleVideo(video, message, channel);
-
+        }
             async function handleVideo(video, message, channel, playlist = false) {
                 const serverQueue = ops.queue.get(message.guild.id);
                 const songInfo = await ytdl.getInfo(video.id);
@@ -81,7 +82,7 @@ module.exports = {
                     voiceChannel: channel,
                     connection: null,
                     songs: [],
-                    volume: 3,
+                    volume: 2,
                     playing: true,
                     loop: false,
                 };
@@ -130,6 +131,5 @@ module.exports = {
                     .setFooter(message.member.displayName, message.author.displayAvatarURL());
                 queue.textChannel.send(embed);
             };
-        }
     }
 };

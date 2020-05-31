@@ -42,7 +42,7 @@ module.exports = {
             const categories = readdirSync("./commands/")
 
             embed.setDescription(`**These Are the Available Commands For ${message.guild.me.displayName}\nBot's Global Prefix Is \`${PREFIX}\`\nServer Prefix Is \`${prefix}\`\n\nFor Help Related To A Particular Command Type -\n\`${prefix}help [command name | alias]\`**`)
-            embed.setFooter(`${message.guild.me.displayName} | Total Commands - ${bot.commands.size}`, bot.user.displayAvatarURL());
+            embed.setFooter(`${message.guild.me.displayName} | Total Commands - ${bot.commands.size - 1}`, bot.user.displayAvatarURL());
 
             categories.forEach(category => {
                 const dir = bot.commands.filter(c => c.config.category === category)
