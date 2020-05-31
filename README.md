@@ -27,7 +27,7 @@ This repo provides support to everyone, feel free to open an issue
         - withdraw
         - work
         
-- Fun
+   * Fun
         - coinflip
         - meme
         - motivation
@@ -51,7 +51,7 @@ This repo provides support to everyone, feel free to open an issue
         - tictactoe
         - trivia
         
-- Image
+   * Image
         - avatar
         - avatarfusion
         - captcha
@@ -70,7 +70,7 @@ This repo provides support to everyone, feel free to open an issue
         - tweet
         - wasted
         
-- Info
+   * Info
         - channelinfo
         - help
         - instasearch
@@ -88,7 +88,7 @@ This repo provides support to everyone, feel free to open an issue
         - whois
         - wikipedia
         
-- Moderation
+   * Moderation
         - addrole
         - ban
         - disablemodlogchannel
@@ -112,7 +112,7 @@ This repo provides support to everyone, feel free to open an issue
         - verify
         - warn
         
-- Music
+   * Music
         - join
         - leave
         - loop
@@ -133,12 +133,12 @@ This repo provides support to everyone, feel free to open an issue
         - stopmusictrivia
         - volume
         
-- Owner
+   * Owner
         - eval
         - getinvite
         - serverlist
         
-- Phone
+   * Phone
         - hangup
         - phonebook
         - phonecall
