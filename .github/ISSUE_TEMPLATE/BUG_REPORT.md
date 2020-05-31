@@ -10,7 +10,7 @@ Bug report | Report incorrect or unexpected behaviour
 
 * Priority this issue should have – please be realistic and elaborate if possible:
 
-[ ] I found this issue while self-hosting the bot.
+- [ ] I found this issue while self-hosting the bot.
   - Node.js version:
   - Commit hash:
   - Operating system:
