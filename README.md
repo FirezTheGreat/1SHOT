@@ -5,8 +5,8 @@ This repo provides support to everyone, feel free to open an issue
 
 ## List of Commands - ##
 - Economy
- - addmoney
-        - balance
+ * addmoney
+ * balance
         - beg
         - buy
         - daily
