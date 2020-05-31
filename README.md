@@ -4,11 +4,11 @@ and last but not the least, Multi and Singleplayer Games for your entertainment!
 This repo provides support to everyone, feel free to open an issue
 
 ## List of Commands - ##
- - Economy
- * addmoney
- * balance
+ * Economy 
+  * addmoney
+  * balance
         - beg
-        - buy
+       - buy
         - daily
         - deposit
         - fish
