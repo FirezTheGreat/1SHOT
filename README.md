@@ -30,7 +30,7 @@ It has over 120 commands! Made with discord.js and last but not the least, Multi
   - withdraw
   - work
 
-*Fun
+* Fun
   - coinflip
   - meme
   - motivation
