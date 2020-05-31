@@ -6,7 +6,7 @@ It has over 120 commands! Made with discord.js and last but not the least, Multi
 * [Server](https://discord.gg/FJNyGam)
 * [Invite Bot](https://discord.com/oauth2/authorize?client_id=694191215062679604&scope=bot&permissions=2146958583)
 
-## List of Commands -##
+## List of Commands - ##
 * Economy
   - addmoney
   - balance
