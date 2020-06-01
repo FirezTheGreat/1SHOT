@@ -13,7 +13,7 @@ module.exports = {
     config: {
         name: 'poker',
         aliases: ['texasholdem'],
-        category: 'games',
+        category: 'fun',
         usage: '[amount]',
         description: `Play Poker With Up To 1 - ${max - 1} Other Users`,
         accessableby: "everyone"
@@ -38,7 +38,7 @@ module.exports = {
         });
         try {
             const awaitedPlayers = await awaitPlayers(message, playersCount);
-            if (!awaitedPlayers) {
+            if (awaitedPlayers.length - 1 < playersCount) {
                 ops.games.delete(message.channel.id);
                 return message.channel.send('**Sufficient Amount Of Players Didnt Join!**');
             }
