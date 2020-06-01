@@ -39,29 +39,6 @@ bot.on('message', async message => {
             console.log(e)
     };
   
-  try {
-        if (message.mentions.has(bot.user) && !message.mentions.has(message.guild.id)) {
-            return message.channel.send(`**My Prefix In This Server is - \`${prefix}\`**`)
-        }
-    } catch {
-        return;
-    };
-  
-  try {
-        const hasText = Boolean(message.content);
-        const hasImage = message.attachments.size !== 0;
-        const hasEmbed = message.embeds.length !== 0;
-        if (message.author.bot || (!hasText && !hasImage && !hasEmbed)) return;
-        const origin = bot.phone.find(call => call.origin.id === message.channel.id);
-        const recipient = bot.phone.find(call => call.recipient.id === message.channel.id);
-        if (!origin && !recipient) return;
-        const call = origin || recipient;
-        if (!call.active) return;
-        await call.send(origin ? call.recipient : call.origin, message, hasText, hasImage, hasEmbed);
-    } catch {
-        return;
-    }
-  
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
 
@@ -133,7 +110,46 @@ bot.on('message', async message => {
             .setDescription(`**${message.author}, You Have Leveled Up To Level ${levelfetch}**`)
             .setFooter(`${prefix}disablexp To Disable Level Up Messages`)
         message.channel.send(levelembed);
-    }
+    };
+});
+
+bot.on('message', async message => {
+    let prefix;
+        try {
+            let fetched = await db.fetch(`prefix_${message.guild.id}`);
+            if (fetched == null) {
+                prefix = PREFIX
+            } else {
+                prefix = fetched
+            }
+        } catch (e) {
+            console.log(e)
+    };
+    try {
+        if (message.mentions.has(bot.user) && !message.mentions.has(message.guild.id)) {
+            return message.channel.send(`**My Prefix In This Server is - \`${prefix}\`**`)
+        }
+    } catch {
+        return;
+    };
+});
+
+bot.on('message', async message => {
+  
+    try {
+        const hasText = Boolean(message.content);
+        const hasImage = message.attachments.size !== 0;
+        const hasEmbed = message.embeds.length !== 0;
+        if (message.author.bot || (!hasText && !hasImage && !hasEmbed)) return;
+        const origin = bot.phone.find(call => call.origin.id === message.channel.id);
+        const recipient = bot.phone.find(call => call.recipient.id === message.channel.id);
+        if (!origin && !recipient) return;
+        const call = origin || recipient;
+        if (!call.active) return;
+        await call.send(origin ? call.recipient : call.origin, message, hasText, hasImage, hasEmbed);
+    } catch {
+        return;
+    };
 });
 
 bot.on('guildMemberAdd', async member => {
@@ -162,7 +178,7 @@ bot.on('guildMemberAdd', async member => {
         try {
             member.guild.channels.cache.get(wChan).send(``, { files: ["Welcome2.png"] })
         } catch (e) {
-            return;
+          
         }
     })
         var r = member.guild.roles.cache.find(r => r.name === 'Community');
