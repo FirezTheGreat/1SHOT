@@ -41,8 +41,8 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setTitle(`**${user.displayName}'s Level Information**`)
                 .setColor("GREEN")
-                .setDescription(`**Current Level - \`${curlvl}\` | Total XP - \`${curxp}\`
-                    Needed XP To Reach Next Level - \`${difference2}\`**
+                .setDescription(`**Current Level - \`${curlvl}\` | Total XP - \`${curxp - 1}\`
+                    Needed XP To Reach Next Level - \`${difference2 + 1}\`**
                     `)
                 .setFooter(message.guild.name, message.guild.iconURL())
             message.channel.send(embed)
