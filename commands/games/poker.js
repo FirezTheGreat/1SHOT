@@ -13,7 +13,7 @@ module.exports = {
     config: {
         name: 'poker',
         aliases: ['texasholdem'],
-        category: 'fun',
+        category: 'games',
         usage: '[amount]',
         description: `Play Poker With Up To 1 - ${max - 1} Other Users`,
         accessableby: "everyone"
