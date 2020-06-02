@@ -92,8 +92,8 @@ module.exports = {
 						.setAuthor(message.author.username, message.author.displayAvatarURL())
 						.setColor('RED')
 						.setTitle(`I'm ${Math.round(guess.proba * 100)}% Sure It's...`)
-						.setDescription(`**${guess.name}${guess.description ? `\nProfession - ${guess.description}` : ''}\nType Yes/No To Confirm!**`)
-						.setThumbnail(guess.absolute_picture_path || null)
+						.setDescription(`**${guess.name}${guess.description ? `\nProfession - ${guess.description}` : ''}\nRanking - ${guess.ranking}\nType Yes/No To Confirm!**`)
+						.setImage(guess.absolute_picture_path || null)
 						.setFooter(forceGuess ? 'Final Guess' : `Guesses - ${timesGuessed}`);
 					await message.channel.send(embed);
 					const verification = await verify(message.channel, message.author);
