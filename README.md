@@ -2,6 +2,8 @@ Hello, I'm the owner of this bot 1SHOT.
 This is a feature-rich bot with multiple purposes - Music, High Moderation, Fun, Info, Economy System, discord-telephone, Image Manipulation.
 It has over 120 commands! Made with discord.js and last but not the least, Multi and Singleplayer Games for your entertainment! This repo provides support to everyone, feel free to open an issue
 
+STAR THE PROJECT IF YOU LIKE IT :)
+
 ## Invite ##
 * [Server](https://discord.gg/FJNyGam)
 * [Invite Bot](https://discord.com/oauth2/authorize?client_id=694191215062679604&scope=bot&permissions=2146958583)
