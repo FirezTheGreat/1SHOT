@@ -4,12 +4,6 @@ It has over 120 commands! Made with discord.js and last but not the least, Multi
 
 STAR THE PROJECT IF YOU LIKE IT :)
 
-## Only Amelia Bot Can Use The Commands From This Repository For Public Use. Amelia©
-
-## Bots Authorized To Use This Repository ##
- >[Amelia](https://discord.com/oauth2/authorize?client_id=756363002835501056&permissions=473037943&scope=bot) -
- [Support Server](https://discord.gg/nv2Dc5R) 
-
 ## List of Commands - ##
 * Economy
   - addmoney
