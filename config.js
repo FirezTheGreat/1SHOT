@@ -10,7 +10,7 @@ exports.GENIUS_API_KEY = ''; // https://genius.com/developers
 
 exports.yandex_API = ''; // https://yandex.com/dev/predictor/keys/get/
 
-exports.news_API = '';
+exports.news_API = ''; // https://newsapi.org/
 
 exports.giphy_API = ''; // https://developers.giphy.com/
 
