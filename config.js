@@ -1,6 +1,6 @@
 exports.TOKEN = ''; //https://discord.com/developers/applications
 
-exports.DBL_API_KEY = '';
+exports.DBL_API_KEY = ''; //https://top.gg
 
 exports.PREFIX = '';
 
