@@ -26,7 +26,7 @@
     "relevant-urban": "^2.0.0",
     "http": "^0.0.0",
     "express": "^4.17.1",
-    "@discordjs/opus": "^0.3.2",
+    "@discordjs/opus": "^0.8.0",
     "fs": "^0.0.2",
     "quick.db": "^7.1.1",
     "iso-639-1": "^2.1.2",
